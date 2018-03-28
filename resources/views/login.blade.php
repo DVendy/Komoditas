@@ -35,7 +35,7 @@
 				@if (session('fail'))
 					<div class="callout callout-danger">
 						<h4>Data akun salah</h4>
-						<p>Data akun yang anda masukkan salah, silahkan periksa kembali.
+						<p>Data akun yang anda masukkan salah, silahkan periksa kembali..
 						</p>
 					</div>
 				@endif
