@@ -18,6 +18,9 @@ class DashboardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+		if(Auth::user()->role == 'desa')
+			return redirect()->action('LahanController@index');
+		
 		return view('index');
 	}
 }

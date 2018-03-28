@@ -24,6 +24,27 @@
 		<![endif]-->
 		<!-- Google Font -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		
+		<style>
+		body {
+			overflow-y: hidden;
+		}
+		.login-page{
+			background: url("{{ asset('/') }}/img/login_bg.jpg?v=2018");
+			background-size: cover;
+		}
+		.login-box, .register-box {
+			margin: 12% auto;
+		}
+		.login-box-body, .register-box-body {
+			background: rgba(84, 84, 84, 0.4);
+			color: #f1f1f1;
+		}
+		.login-logo a, .register-logo a {
+			color: #fff;
+			text-shadow: 0 1px 2px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.5);
+		}
+		</style>
 	</head>
 	<body class="hold-transition login-page">
 		<div class="login-box">
@@ -35,7 +56,7 @@
 				@if (session('fail'))
 					<div class="callout callout-danger">
 						<h4>Data akun salah</h4>
-						<p>Data akun yang anda masukkan salah, silahkan periksa kembali..
+						<p>Data akun yang anda masukkan salah, silahkan periksa kembali.
 						</p>
 					</div>
 				@endif
@@ -56,7 +77,7 @@
 						</div>
 						<!-- /.col -->
 						<div class="col-xs-4">
-							<button type="submit" class="btn btn-primary btn-block btn-flat">Masuk</button>
+							<button type="submit" class="btn btn-success btn-block btn-flat"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Masuk</button>
 						</div>
 						<!-- /.col -->
 					</div>

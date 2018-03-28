@@ -11,6 +11,11 @@
 |
 */
 
+Route::get('/tes', function(){
+	//die();
+	dd(mt_rand(107*10000000, 111*10000000) / 10000000);
+});
+
 Route::get('/god/admin', function(){
 	//die();
 	$user = App\User::where('email', 'superadmin@komoditas.id')->first();
@@ -58,7 +63,19 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('/do-edit-kecamatan', 'LocationController@doEditKecamatan');
 		Route::post('/do-edit-kabupaten', 'LocationController@doEditKabupaten');
 		Route::post('/do-edit-provinsi', 'LocationController@doEditProvinsi');
+	});
+	
+	Route::group(['prefix' => 'lahan'], function () {
+		Route::get('/', 'LahanController@index');
+		Route::get('/create', 'LahanController@create');
+		Route::post('/do-create', 'LahanController@doCreate');
+		Route::get('/edit/{id}', 'LahanController@edit');
+		Route::post('/do-edit/{id}', 'LahanController@doEdit');
+		Route::get('/delete/{id}', 'LahanController@delete');
 		
+		Route::group(['prefix' => 'admin'], function () {
+			Route::get('/', 'LahanController@indexAdmin');
+		});
 	});
 	
 	Route::get('/logout', 'Auth\LoginController@logout');

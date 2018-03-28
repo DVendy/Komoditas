@@ -7,6 +7,8 @@ use App\Provinsi;
 use App\Kabupaten;
 use App\Kecamatan;
 use App\Desa;
+use App\Fase;
+use App\Lahan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -41,6 +43,42 @@ class DatabaseSeeder extends Seeder
 			$user->save();
 		}
 		
+		//FASE	
+		$data = array(
+			array(
+				'name'=>'Persiapan', 'urutan'=>1,
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				 'name'=>'Penanaman', 'urutan'=>2,
+				 'created_at'=>date('Y-m-d H:i:s'),
+				 'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				 'name'=>'Pemeliharaan', 'urutan'=>3,
+				 'created_at'=>date('Y-m-d H:i:s'),
+				 'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				 'name'=>'Panen', 'urutan'=>4,
+				 'created_at'=>date('Y-m-d H:i:s'),
+				 'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				 'name'=>'Kosong', 'urutan'=>5,
+				 'created_at'=>date('Y-m-d H:i:s'),
+				 'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+		);
+
+		Fase::insert($data);
+		$fase_ids = [];
+		$fase = Fase::all();
+		foreach($fase as $val){
+			$fase_ids[] = $val->id;
+		}
+		
 		//LOCATION	
 		echo('create location'.PHP_EOL);	
 		$faker = Faker\Factory::create();		
@@ -63,6 +101,34 @@ class DatabaseSeeder extends Seeder
 						$des->name = $faker->streetName;
 						$des->kecamatan_id = $kec->id;
 						$des->save();
+						
+						if(rand(1, 10) < 5){
+							$user = new App\User;
+							$user->name = $faker->firstName.' '.$faker->lastName;
+							$user->email = '-1';
+							$user->phone = '-1';
+							$user->password = Hash::make('123qwe');
+							$user->role = 'desa';
+							$user->save();
+							
+							$user->phone = '081_'.$user->id;
+							$user->email = $user->phone;
+							$user->save();
+							
+							$des->user_id = $user->id;
+							$des->save();
+							
+							for($i_lahan = 0; $i_lahan < rand(4, 8); $i_lahan++){
+								$lahan = new App\Lahan;
+								$lahan->desa_id = $des->id;
+								$lahan->fase_id = $fase_ids[rand(0, 4)];
+								$lahan->name = 'Lahan '.$faker->secondaryAddress;
+								$lahan->luas = mt_rand(100*100, 800*100) / 100;
+								$lahan->lat = ''.(mt_rand(-7.7*10000000, -6.8*10000000) / 10000000);
+								$lahan->long = ''.(mt_rand(107*10000000, 111*10000000) / 10000000);
+								$lahan->save();
+							}
+						}
 					}
 				}
 			}
@@ -81,6 +147,8 @@ class DatabaseSeeder extends Seeder
 		Kabupaten::truncate();
 		Kecamatan::truncate();
 		Desa::truncate();
+		Fase::truncate();
+		Lahan::truncate();
 		
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 	}

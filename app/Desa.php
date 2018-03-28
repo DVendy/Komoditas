@@ -11,4 +11,8 @@ class Desa extends Model
 	public function kecamatan(){
 		return $this->belongsTo('App\Kecamatan');
 	}
+	
+	public function lahan(){
+		return $this->hasMany('App\Lahan');
+	}
 }
