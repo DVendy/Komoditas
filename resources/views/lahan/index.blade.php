@@ -1,10 +1,18 @@
 @php
-	$lahan = Auth::user()->desa->lahan;
+	$auth = Auth::user();
+	
+	if($auth->role == 'desa')
+		$lahan = Auth::user()->lahan_pengurus;
+	else
+		$lahan = App\Lahan::all();
+	// dd($lahan);
 @endphp
 
 @extends('base')
 
 @section('title', 'Lahan')
+
+@section('bodyClass', 'sidebar-collapse')
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets') }}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
@@ -18,7 +26,7 @@
 			white-space:nowrap;
 		}
 		#map {
-			height: 500px;
+			height: 300px;
 			width: 100%;
 			margin-bottom: 15px;
 		}
@@ -43,25 +51,31 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">Lahan</h3>
 					</div>
-					<div class="box-body">
+					<div class="box-body table-responsive no-padding">
 						<table class="table table-bordered table-striped datatable">
 							<thead>
 								<tr>
+									<th>Provinsi</th>
+									<th>Kabupaten</th>
+									<th>Kecamatan</th>
+									<th>Desa</th>
 									<th>Nama</th>
 									<th>Luas</th>
-									<th>Fase</th>
 									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($lahan as $val)
 								<tr>
+									<td>{{ $val->desa->kecamatan->kabupaten->provinsi->name }}</td>
+									<td>{{ $val->desa->kecamatan->kabupaten->name }}</td>
+									<td>{{ $val->desa->kecamatan->name }}</td>
+									<td>{{ $val->desa->name }}</td>
 									<td>{{ $val->name }}</td>
 									<td>{{ (float)$val->luas }} m<sup>2</sup></td>
-									<td>{{ $val->fase->name }}</td>
 									<td>
-										<a href="{{ action('LocationController@edit', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('LocationController@delete', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a href="{{ action('LahanController@edit', [$val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('LahanController@delete', [$val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -115,15 +129,15 @@
 			@endforeach
 			
 			// Cluster
-			// var mcOptions = {gridSize: 50, maxZoom: 15};
-			// var markerCluster = new MarkerClusterer(map, markers,
-						// {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m', gridSize: 50});
+			var mcOptions = {gridSize: 50, maxZoom: 15};
+			var markerCluster = new MarkerClusterer(map, markers,
+						{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m', gridSize: 50});
 		}		
 	</script>
 	
 	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
 	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqAolMxKdmVGho_hUHT8PSruNHsEmzWR4&callback=initMap">
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANsougrSUpI31P6dd8-1ebK60qBDTS2wY&callback=initMap">
 	</script>
 @endsection

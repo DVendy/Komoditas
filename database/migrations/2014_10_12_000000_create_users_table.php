@@ -63,7 +63,6 @@ class CreateUsersTable extends Migration
         Schema::create('desa', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('kecamatan_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->string('name');
 			$table->longText('other')->nullable();
             $table->timestamps();
@@ -71,11 +70,6 @@ class CreateUsersTable extends Migration
             $table->foreign('kecamatan_id')
             ->references('id')->on('kecamatan')
             ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-            $table->foreign('user_id')
-            ->references('id')->on('users')
-			->onDelete('set null')
             ->onUpdate('cascade');
         });
 
@@ -89,8 +83,8 @@ class CreateUsersTable extends Migration
 		
 		Schema::create('lahan', function (Blueprint $table){
 			$table->bigIncrements('id');
+            $table->bigInteger('pengurus_id')->unsigned()->nullable();
             $table->bigInteger('desa_id')->unsigned()->nullable();
-            $table->bigInteger('fase_id')->unsigned()->nullable();
 			$table->longText('other')->nullable();
             $table->string('name');
             $table->string('lat');
@@ -104,9 +98,9 @@ class CreateUsersTable extends Migration
             ->onDelete('set null')
             ->onUpdate('cascade');
 
-            $table->foreign('fase_id')
-            ->references('id')->on('fase')
-            ->onDelete('set null')
+            $table->foreign('pengurus_id')
+            ->references('id')->on('users')
+			->onDelete('set null')
             ->onUpdate('cascade');
         });
 
@@ -130,7 +124,8 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('komoditas_id')->unsigned();
             $table->bigInteger('lahan_id')->unsigned();
-			$table->decimal('luas', 10, 4);
+            $table->bigInteger('fase_id')->unsigned()->nullable();
+			$table->decimal('luas', 10, 4)->nullable();
 			$table->decimal('jumlah', 10, 4)->nullable();
 			$table->longText('other')->nullable();
             $table->timestamps();
@@ -141,6 +136,11 @@ class CreateUsersTable extends Migration
             ->onUpdate('cascade');
 
             $table->foreign('lahan_id')
+            ->references('id')->on('lahan')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+
+            $table->foreign('fase_id')
             ->references('id')->on('fase')
             ->onDelete('cascade')
             ->onUpdate('cascade');

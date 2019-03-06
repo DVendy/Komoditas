@@ -1,6 +1,11 @@
 @php
 	$auth= Auth::user();
 	$fase = App\Fase::all();
+	
+	$provinsi = App\Provinsi::all();
+	$kabupaten = App\Kabupaten::all();
+	$kecamatan = App\Kecamatan::all();
+	$desa = App\Desa::all();
 @endphp
 
 @extends('base')
@@ -29,7 +34,6 @@
 	<section class="content">
 		<form action="{{ action('LahanController@doCreate') }}" method="POST" role="form">
 			{{ csrf_field() }}
-			<input name="desa_id" type="hidden" value="{{ $auth->desa->id }}">
 			<div class="row">
 				<div class="col-md-8">
 					@if($errors->all())
@@ -52,6 +56,45 @@
 						<!-- form start -->
 						<div class="box-body">
 							<div class="form-group">
+								<label for="exampleInputEmail1">Lokasi</label>
+								<div class="row">
+									<div class="col-md-6">
+										<select class="form-control" id="select_prov">
+											<option selected disabled>--Pilih Provinsi--</option>
+											@foreach($provinsi as $val)
+												<option value="{{ $val->id }}">{{ $val->name }}</option>
+											@endforeach
+										</select>
+									</div>
+									<div class="col-md-6">
+										<select class="form-control" id="select_kab">
+											<option selected disabled>--Pilih Kabupaten--</option>
+											@foreach($kabupaten as $val)
+												<option data-prov_id="{{ $val->provinsi_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
+											@endforeach
+										</select>
+									</div>
+									<div class="col-md-6">
+										<br>
+										<select class="form-control" id="select_kec">
+											<option selected disabled>--Pilih Kecamatan--</option>
+											@foreach($kecamatan as $val)
+												<option data-kab_id="{{ $val->kabupaten_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
+											@endforeach
+										</select>
+									</div>
+									<div class="col-md-6">
+										<br>
+										<select name="desa_id" class="form-control" id="select_desa">
+											<option selected disabled>--Pilih Desa--</option>
+											@foreach($desa as $val)
+												<option data-kec_id="{{ $val->kecamatan_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
 								<label for="exampleInputEmail1">Nama</label>
 								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Lahan sebagai identifikasi">
 							</div>
@@ -60,36 +103,12 @@
 								<input name="luas" type="number" class="form-control" placeholder="ex: 846.56" step="0.01">
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">Informasi Pemilik Lahan</label>
+								<label for="exampleInputEmail1">Informasi pemilik lahan</label>
 								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
 							</div>
+							
 							<div class="form-group">
-								<label for="exampleInputEmail1">Fase Lahan</label>
-								<div class="form-group">
-									@foreach($fase as $val)
-									<div class="radio">
-										<label>
-											<input type="radio" name="fase_id" id="optionsRadios1" value="{{ $val->id }}">
-											{{ $val->name }}
-											<small>
-												
-											</small>
-										</label>
-									</div>
-									@endforeach
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="box box-primary box-flat">
-						<div class="box-header with-border">
-							<h3 class="box-title">Lokasi Lahan</h3>
-						</div>
-						<!-- /.box-header -->
-						<!-- form start -->
-						<div class="box-body">
-							<div class="form-group">
+								<label for="exampleInputEmail1">Lokasi Lahan</label>
 								<div class="alert alert-info">
 									<h4><i class="icon fa fa-info"></i> Info</h4>
 									<li>Klik pada map untuk menentukan lokasi lahan.</li>
@@ -180,9 +199,68 @@
 			(document.getElementById("long")).value = location.lng();
 
 		}
+		// select
+		function ChangeProv() {
+			var curProv = $('#select_prov').val(); //Get the current select project
+			$('#select_kab option').each(function () { //Loop through each option
+				var curKabProv = $(this).attr('data-prov_id'); //Put the array of projects in a variable
+				if (curKabProv == curProv) { //If current project ID is in array of projects
+					$(this).show(); //Show the option
+				} else { // Else if current project ID is NOT in array of projects
+					$(this).hide(); //hide the option
+				}
+			});
+			$('#select_kec option').each(function () { //Loop through each option
+				$(this).hide(); //hide the option
+			});
+			$('#select_desa option').each(function () { //Loop through each option
+				$(this).hide(); //hide the option
+			});
+		}
+		
+		function ChangeKab() {
+			var curProv = $('#select_kab').val(); //Get the current select project
+			$('#select_kec option').each(function () { //Loop through each option
+				var curKabProv = $(this).attr('data-kab_id'); //Put the array of projects in a variable
+				if (curKabProv == curProv) { //If current project ID is in array of projects
+					$(this).show(); //Show the option
+				} else { // Else if current project ID is NOT in array of projects
+					$(this).hide(); //hide the option
+				}
+			});
+			$('#select_desa option').each(function () { //Loop through each option
+				$(this).hide(); //hide the option
+			});
+		}
+		
+		function ChangeKec() {
+			var curKec = $('#select_kec').val(); //Get the current select project
+			$('#select_desa option').each(function () { //Loop through each option
+				var curkec_id = $(this).attr('data-kec_id'); //Put the array of projects in a variable
+				if (curkec_id == curKec) { //If current project ID is in array of projects
+					$(this).show(); //Show the option
+				} else { // Else if current project ID is NOT in array of projects
+					$(this).hide(); //hide the option
+				}
+			});
+		}
+		
+		$('#select_prov').on('change', function() { //When we change the project, call the function
+			ChangeProv();
+		});
+		$('#select_kab').on('change', function() { //When we change the project, call the function
+			ChangeKab();
+		});
+		$('#select_kec').on('change', function() { //When we change the project, call the function
+			ChangeKec();
+		});
+		
+		ChangeProv(); //Call the function when we run the page
+		ChangeKab(); //Call the function when we run the page
+		ChangeKec(); //Call the function when we run the page
     </script>
 	
 	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqAolMxKdmVGho_hUHT8PSruNHsEmzWR4&callback=initMap">
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANsougrSUpI31P6dd8-1ebK60qBDTS2wY&callback=initMap">
 	</script>
 @endsection

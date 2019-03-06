@@ -43,7 +43,7 @@ class AdminController extends Controller
 				'name' => 'required',
 				'role' => 'required|in:desa,admin,superadmin',
 				'phone' => 'required|unique:users',
-				'desa_id' => 'required',
+				// 'desa_id' => 'required',
 				'password' => 'required|confirmed',
 			]);
 		}else{
@@ -72,20 +72,28 @@ class AdminController extends Controller
         $admin->save();
 
 		//ROLE
-		if($admin->role == 'desa'){
+		// if($admin->role == 'desa'){
+		if(false){
 			$desa = Desa::find($request->desa_id);
 			$desa->user_id = $admin->id;
 			$desa->save();
 		}
 		
-        return redirect()->action('AdminController@edit', [$admin->id])->withMessages('Data admin telah berhasil disimpan');
+        return redirect()->action('AdminController@index')->withMessages('Data admin telah berhasil disimpan');
     }
 	
     public function edit($id)
     {
 		$admin = User::find($id);
-		dd($admin);
+		// dd($admin);
 		
         return view('admin.create');
+    }
+	
+    public function delete($id)
+    {
+		$admin = User::find($id);
+		$admin->delete();
+		return redirect()->action('AdminController@index');
     }
 }

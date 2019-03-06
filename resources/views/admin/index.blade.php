@@ -68,7 +68,6 @@
 								<tr>
 									<th>Nama</th>
 									<th>No. HP</th>
-									<th>Desa</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -77,10 +76,9 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
-									<td>{{ $val->desa->name }}</td>
 									<td>
-										<a href="{{ action('LocationController@edit', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('LocationController@delete', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -111,8 +109,8 @@
 									<td>{{ $val->phone }}</td>
 									<td>{{ $val->email }}</td>
 									<td>
-										<a href="{{ action('LocationController@edit', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('LocationController@delete', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach

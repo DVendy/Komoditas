@@ -1,6 +1,9 @@
 @php
 	$auth = Auth::user();
 	$theme = 'green';
+	
+	if($auth->role == 'desa')
+		$theme = 'blue';
 @endphp
 
 <!DOCTYPE html>

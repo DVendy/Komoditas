@@ -8,6 +8,7 @@ use App\Kabupaten;
 use App\Kecamatan;
 use App\Desa;
 use App\Fase;
+use App\Komoditas;
 use App\Lahan;
 
 class DatabaseSeeder extends Seeder
@@ -42,6 +43,32 @@ class DatabaseSeeder extends Seeder
 			$user->role = 'admin';
 			$user->save();
 		}
+		
+		// KOMODITAS
+		$data = array(
+			array(
+				'name'=>'Padi', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'Jagung', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'Ayam', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'Sapi', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+		);
+
+		Komoditas::insert($data);
 		
 		//FASE	
 		$data = array(
@@ -102,32 +129,14 @@ class DatabaseSeeder extends Seeder
 						$des->kecamatan_id = $kec->id;
 						$des->save();
 						
-						if(rand(1, 10) < 5){
-							$user = new App\User;
-							$user->name = $faker->firstName.' '.$faker->lastName;
-							$user->email = '-1';
-							$user->phone = '-1';
-							$user->password = Hash::make('123qwe');
-							$user->role = 'desa';
-							$user->save();
-							
-							$user->phone = '081_'.$user->id;
-							$user->email = $user->phone;
-							$user->save();
-							
-							$des->user_id = $user->id;
-							$des->save();
-							
-							for($i_lahan = 0; $i_lahan < rand(4, 8); $i_lahan++){
-								$lahan = new App\Lahan;
-								$lahan->desa_id = $des->id;
-								$lahan->fase_id = $fase_ids[rand(0, 4)];
-								$lahan->name = 'Lahan '.$faker->secondaryAddress;
-								$lahan->luas = mt_rand(100*100, 800*100) / 100;
-								$lahan->lat = ''.(mt_rand(-7.7*10000000, -6.8*10000000) / 10000000);
-								$lahan->long = ''.(mt_rand(107*10000000, 111*10000000) / 10000000);
-								$lahan->save();
-							}
+						for($i_lahan = 0; $i_lahan < rand(4, 8); $i_lahan++){
+							$lahan = new App\Lahan;
+							$lahan->desa_id = $des->id;
+							$lahan->name = 'Lahan '.$faker->secondaryAddress;
+							$lahan->luas = mt_rand(100*100, 800*100) / 100;
+							$lahan->lat = ''.(mt_rand(-7.7*10000000, -6.8*10000000) / 10000000);
+							$lahan->long = ''.(mt_rand(107*10000000, 111*10000000) / 10000000);
+							$lahan->save();
 						}
 					}
 				}

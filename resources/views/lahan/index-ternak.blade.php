@@ -1,6 +1,21 @@
 @php
-	$lahan = App\Lahan::all();
-	// dd($lahan);
+	$auth = Auth::user();
+	
+	if($auth->role == 'desa'){
+		$lahanIds = Auth::user()->lahan_pengurus()->pluck('id');
+		$komoTanamanIds = App\Komoditas::where('type', 'ternak')->pluck('id');
+		
+		$komoditasLahan = App\KomoditasLahan::
+							whereIn('lahan_id', $lahanIds)
+							->whereIn('komoditas_id', $komoTanamanIds)
+							->get();
+	}else{
+		$komoTanamanIds = App\Komoditas::where('type', 'ternak')->pluck('id');
+		
+		$komoditasLahan = App\KomoditasLahan::whereIn('komoditas_id', $komoTanamanIds)
+							->get();
+	}
+	// dd($komoditasLahan);
 @endphp
 
 @extends('base')
@@ -54,23 +69,27 @@
 									<th>Kabupaten</th>
 									<th>Kecamatan</th>
 									<th>Desa</th>
-									<th>Nama</th>
-									<th>Luas</th>
+									<th>Nama Lahan</th>
+									<th>Luas Lahan</th>
+									<th>Komoditas</th>
+									<th>Jumlah (ekor)</th>
 									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($lahan as $val)
+								@foreach($komoditasLahan as $val)
 								<tr>
-									<td>{{ $val->desa->kecamatan->kabupaten->provinsi->name }}</td>
-									<td>{{ $val->desa->kecamatan->kabupaten->name }}</td>
-									<td>{{ $val->desa->kecamatan->name }}</td>
-									<td>{{ $val->desa->name }}</td>
-									<td>{{ $val->name }}</td>
-									<td>{{ (float)$val->luas }} m<sup>2</sup></td>
+									<td>{{ $val->lahan->desa->kecamatan->kabupaten->provinsi->name }}</td>
+									<td>{{ $val->lahan->desa->kecamatan->kabupaten->name }}</td>
+									<td>{{ $val->lahan->desa->kecamatan->name }}</td>
+									<td>{{ $val->lahan->desa->name }}</td>
+									<td>{{ $val->lahan->name }}</td>
+									<td>{{ (float)$val->lahan->luas }} m<sup>2</sup></td>
+									<td>{{ $val->komoditas->name }}</td>
+									<td>{{ round($val->jumlah, 0) }}</td>
 									<td>
 										<a href="{{ action('LocationController@edit', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('LocationController@delete', ['kecamatan', $val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a href="{{ action('LahanController@deleteKomoditas', [$val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -114,11 +133,11 @@
 			} 
 			markers = [];
 			
-			@foreach($lahan as $val)
+			@foreach($komoditasLahan as $val)
 				markers.push(new google.maps.Marker({
-					position: {lat: {{ $val->lat }}, lng: {{ $val->long }}},
+					position: {lat: {{ $val->lahan->lat }}, lng: {{ $val->lahan->long }}},
 					map: map,
-					label: '{{ $val->name }}',
+					label: '{{ $val->lahan->name }}',
 					animation: google.maps.Animation.DROP,
 				}));
 			@endforeach

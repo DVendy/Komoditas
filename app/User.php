@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 	
-	public function desa(){
-		return $this->hasOne('App\Desa');
+	public function lahan_pengurus(){
+		return $this->hasMany('App\Lahan', 'pengurus_id');
 	}
 }
