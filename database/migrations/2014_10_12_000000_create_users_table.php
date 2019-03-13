@@ -131,7 +131,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->foreign('komoditas_id')
-            ->references('id')->on('desa')
+            ->references('id')->on('komoditas')
             ->onDelete('cascade')
             ->onUpdate('cascade');
 
@@ -155,12 +155,12 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->foreign('komoditas_id')
-            ->references('id')->on('desa')
+            ->references('id')->on('komoditas')
             ->onDelete('cascade')
             ->onUpdate('cascade');
 
             $table->foreign('lahan_id')
-            ->references('id')->on('fase')
+            ->references('id')->on('lahan')
             ->onDelete('cascade')
             ->onUpdate('cascade');
         });
@@ -179,7 +179,7 @@ class CreateUsersTable extends Migration
             ->onUpdate('cascade');
 
             $table->foreign('lahan_id')
-            ->references('id')->on('fase')
+            ->references('id')->on('lahan')
             ->onDelete('cascade')
             ->onUpdate('cascade');
         });
