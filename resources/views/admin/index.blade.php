@@ -1,6 +1,9 @@
 @php
-	$admin_desa = App\User::where('role', 'desa')->get();
-	$admin = App\User::where('role', 'admin')->get();
+	$admin_prov = App\User::where('role', 'korprov')->get();
+	$admin_kab = App\User::where('role', 'korkab')->get();
+	$admin_kec = App\User::where('role', 'korkec')->get();
+	$admin_desa = App\User::where('role', 'kordes')->get();
+	$admin = App\User::whereIn('role', ['superadmin', 'admin'])->get();
 @endphp
 
 @extends('base')
@@ -46,10 +49,19 @@
 				<div class="box box-solid">
 					<div class="box-body no-padding">
 						<ul class="nav nav-pills nav-stacked">
-							<li class="my-li active"><a href="#" onclick="showBox(this, '#box_des')"><i class="fa fa-inbox"></i> Admin Desa
+							<li class="my-li active"><a href="#" onclick="showBox(this, '#box_des')"><i class="fa fa-inbox"></i> Koordinator Desa
 								<span class="label label-primary pull-right">{{ $admin_desa->count() }}</span></a>
 							</li>
-							<li class="my-li"><a href="#" onclick="showBox(this, '#box_kec')"><i class="fa fa-inbox"></i> Admin
+							<li class="my-li"><a href="#" onclick="showBox(this, '#box_kec')"><i class="fa fa-inbox"></i> Koordinator Kecamatan
+								<span class="label label-primary pull-right">{{ $admin_kec->count() }}</span></a>
+							</li>
+							<li class="my-li"><a href="#" onclick="showBox(this, '#box_kab')"><i class="fa fa-inbox"></i> Koordinator Kabupaten
+								<span class="label label-primary pull-right">{{ $admin_kab->count() }}</span></a>
+							</li>
+							<li class="my-li"><a href="#" onclick="showBox(this, '#box_prov')"><i class="fa fa-inbox"></i> Koordinator Provinsi
+								<span class="label label-primary pull-right">{{ $admin_prov->count() }}</span></a>
+							</li>
+							<li class="my-li"><a href="#" onclick="showBox(this, '#box_admin')"><i class="fa fa-inbox"></i> Admin
 								<span class="label label-primary pull-right">{{ $admin->count() }}</span></a>
 							</li>
 						</ul>
@@ -88,6 +100,96 @@
 				</div>
 			</div>
 			<div class="col-md-9" id="box_kec" style="display: none;">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<h3 class="box-title">Koordinator Kecamatan</h3>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered table-striped datatable">
+							<thead>
+								<tr>
+									<th>Nama</th>
+									<th>No. HP</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($admin_kec as $val)
+								<tr>
+									<td>{{ $val->name }}</td>
+									<td>{{ $val->phone }}</td>
+									<td>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+									</td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9" id="box_kab" style="display: none;">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<h3 class="box-title">Koordinator Kabupaten</h3>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered table-striped datatable">
+							<thead>
+								<tr>
+									<th>Nama</th>
+									<th>No. HP</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($admin_kab as $val)
+								<tr>
+									<td>{{ $val->name }}</td>
+									<td>{{ $val->phone }}</td>
+									<td>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+									</td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9" id="box_prov" style="display: none;">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<h3 class="box-title">Koordinator Provinsi</h3>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered table-striped datatable">
+							<thead>
+								<tr>
+									<th>Nama</th>
+									<th>No. HP</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($admin_prov as $val)
+								<tr>
+									<td>{{ $val->name }}</td>
+									<td>{{ $val->phone }}</td>
+									<td>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+									</td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9" id="box_admin" style="display: none;">
 				<div class="box box-primary box-flat">
 					<div class="box-header with-border">
 						<h3 class="box-title">Admin</h3>
@@ -136,6 +238,9 @@
 		function hideAll(){
 			$('#box_des').hide();
 			$('#box_kec').hide();
+			$('#box_kab').hide();
+			$('#box_prov').hide();
+			$('#box_admin').hide();
 		}
 		
 		function showBox(asd, id){
