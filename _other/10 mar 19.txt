@@ -1,0 +1,19 @@
+-role per jenis wilayah
+-kordes hanya bisa input desa
+-korcam bisa CRUD admin
+
+-input data per hari - history
+-tambah jenis komoditas ikan
+-detal input ada di excel
+
+HPP
+-per kabupaten
+-per komoditas ada satuan hpp (string) -> Rp/kg ikan
+-dalam menu hpp ada list komoditas
+-ada history
+
+ONLINE SHOP
+-per komoditas ada harga
+-lihat dulu panen kapan, munculin pas milih tanggal
+-ongkir per provinsi
+-kalo diambil di tempat ga bayar
