@@ -1,8 +1,8 @@
 @php
 	$auth = Auth::user();
 	
-	if($auth->role == 'desa')
-		$lahan = Auth::user()->lahan_pengurus;
+	if($auth->role == 'kordes')
+		$lahan = Auth::user()->lahans();
 	else
 		$lahan = App\Lahan::all();
 	// dd($lahan);

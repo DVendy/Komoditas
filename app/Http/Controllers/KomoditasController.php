@@ -25,7 +25,7 @@ class KomoditasController extends Controller
 		// dd($request->all());
 		$validator = Validator::make($request->all(), [
 			'name' => 'required',
-			'type' => 'required|in:tanaman,ternak',
+			'type' => 'required|in:tanaman,ternak,ikan',
 		]);
 
         if ($validator->fails())

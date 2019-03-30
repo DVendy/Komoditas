@@ -2,6 +2,7 @@
 	$auth= Auth::user();
 	$komo_tanaman = App\Komoditas::orderBy('type', 'asc')->where('type', 'tanaman')->get();
 	$komo_ternak = App\Komoditas::orderBy('type', 'asc')->where('type', 'ternak')->get();
+	$komo_ikan = App\Komoditas::orderBy('type', 'asc')->where('type', 'ikan')->get();
 	$fase = App\Fase::all();
 @endphp
 
@@ -10,6 +11,8 @@
 @section('title', 'Lahan')
 
 @section('style')
+  <!-- bootstrap datepicker -->
+	<link rel="stylesheet" href="{{ asset('assets') }}/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 	<style>
 		#map {
 			height: 500px;
@@ -48,57 +51,27 @@
 					<div class="box box-primary box-flat">
 						<div class="box-body">
 							<div class="form-group">
-								<label for="exampleInputEmail1">Pilih jenis komoditas untuk lahan ini</label>
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-12">
 										<div class="form-group">
-											@foreach($komo_tanaman as $val)
-											<div class="radio">
-												<label>
-													<input type="radio" name="komoditas_id" value="{{ $val->id }}" onClick="onKomoTypeChange('tanaman');">
-													{{ ucfirst($val->type) }} - {{ $val->name }}
-												</label>
-											</div>
-											@endforeach
+											<label>Pilih jenis komoditas untuk lahan ini</label>
+											<select class="form-control" onchange="onKomoTypeChangeSelect(this)" name="komoditas_id">
+													<option disabled selected>---Pilih Jenis Komoditas---</option>
+													<option disabled style=" font-weight: bold; ">---Ternak---</option>
+												@foreach($komo_ternak as $val)
+													<option value="{{ $val->id }}" type="ternak">{{ $val->name }}</option>
+												@endforeach
+													<option disabled style=" font-weight: bold; ">---Tanaman---</option>
+												@foreach($komo_tanaman as $val)
+													<option value="{{ $val->id }}" type="tanaman">{{ $val->name }}</option>
+												@endforeach
+													<option disabled style=" font-weight: bold; ">---Ikan---</option>
+												@foreach($komo_ikan as $val)
+													<option value="{{ $val->id }}" type="ikan">{{ $val->name }}</option>
+												@endforeach
+											</select>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											@foreach($komo_ternak as $val)
-											<div class="radio">
-												<label>
-													<input type="radio" name="komoditas_id" value="{{ $val->id }}" onClick="onKomoTypeChange('ternak');">
-													{{ ucfirst($val->type) }} - {{ $val->name }}
-												</label>
-											</div>
-											@endforeach
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="box box-primary box-flat" id="detail-tanaman">
-						<div class="box-body">
-							<div class="form-group">
-								<label for="exampleInputEmail1">Luas alokasi - dalam satuan Meter persegi (m<sup>2</sup>)</label>
-								<input name="luas" type="number" class="form-control" placeholder="ex: 846.56" step="0.01">
-							</div>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Fase Lahan</label>
-								<div class="form-group">
-									@foreach($fase as $val)
-									<div class="radio">
-										<label>
-											<input type="radio" name="fase_id" id="optionsRadios1" value="{{ $val->id }}">
-											{{ $val->name }}
-											<small>
-												
-											</small>
-										</label>
-									</div>
-									@endforeach
 								</div>
 							</div>
 						</div>
@@ -107,8 +80,110 @@
 					<div class="box box-primary box-flat" id="detail-ternak">
 						<div class="box-body">
 							<div class="form-group">
-								<label for="exampleInputEmail1">Jumlah ternak (ekor)</label>
-								<input name="jumlah" type="number" class="form-control" placeholder="ex: 120" step="1">
+								<label>Luas Kandang (dalam m<sup>2</sup>)</label>
+								<input name="b_luas_kandang" type="number" class="form-control" placeholder="contoh: 574">
+							</div>
+							<div class="form-group">
+								<label>Tahap Persiapan (dalam m<sup>2</sup>)</label>
+								<input name="b_tahap_persiapan" type="number" class="form-control" placeholder="contoh: 312">
+							</div>
+							<div class="form-group">
+								<label>Tahap Pemeliharaan (dalam m<sup>2</sup>)</label>
+								<input name="b_tahap_pemeliharaan" type="number" class="form-control" placeholder="contoh: 112">
+							</div>
+							<div class="form-group">
+								<label>Tahap Panen (dalam m<sup>2</sup>)</label>
+								<input name="b_tahap_panen" type="number" class="form-control" placeholder="contoh: 23">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Masuk Ternak</label>
+								<input name="b_tanggal_masuk_ternak" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Jumlah TERNAK (dalam ekor)</label>
+								<input name="b_jumlah_ternak" type="number" class="form-control" placeholder="contoh: 155">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Panen</label>
+								<input name="b_tanggal_panen" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Estimasi Hasil Panen (dalam ekor)</label>
+								<input name="b_estimasi_hasil_panen" type="number" class="form-control" placeholder="contoh: 103">
+							</div>
+						</div>
+					</div>
+					
+					<div class="box box-primary box-flat" id="detail-tanaman">
+						<div class="box-body">
+							<div class="form-group">
+								<label>Luas Lahan (dalam m<sup>2</sup>)</label>
+								<input name="t_luas_lahan" type="number" class="form-control" placeholder="contoh: 574">
+							</div>
+							<div class="form-group">
+								<label>Tahap Persiapan (dalam m<sup>2</sup>)</label>
+								<input name="t_tahap_persiapan" type="number" class="form-control" placeholder="contoh: 312">
+							</div>
+							<div class="form-group">
+								<label>Tahap Pemeliharaan (dalam m<sup>2</sup>)</label>
+								<input name="t_tahap_pemeliharaan" type="number" class="form-control" placeholder="contoh: 112">
+							</div>
+							<div class="form-group">
+								<label>Tahap Panen (dalam m<sup>2</sup>)</label>
+								<input name="t_tahap_panen" type="number" class="form-control" placeholder="contoh: 23">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Mulai Tanam</label>
+								<input name="t_tanggal_mulai_tanam" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Jumlah Tanaman (dalam pohon)</label>
+								<input name="t_jumlah_tanaman" type="number" class="form-control" placeholder="contoh: 155">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Panen</label>
+								<input name="t_tanggal_panen" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Estimasi Hasil Panen (dalam kg)</label>
+								<input name="t_estimasi_hasil_panen" type="number" class="form-control" placeholder="contoh: 103">
+							</div>
+						</div>
+					</div>
+					
+					<div class="box box-primary box-flat" id="detail-ikan">
+						<div class="box-body">
+							<div class="form-group">
+								<label>Luas Kolam (dalam m<sup>2</sup>)</label>
+								<input name="i_luas_kolam" type="number" class="form-control" placeholder="contoh: 574">
+							</div>
+							<div class="form-group">
+								<label>Tahap Persiapan (dalam m<sup>2</sup>)</label>
+								<input name="i_tahap_persiapan" type="number" class="form-control" placeholder="contoh: 312">
+							</div>
+							<div class="form-group">
+								<label>Tahap Pemeliharaan (dalam m<sup>2</sup>)</label>
+								<input name="i_tahap_pemeliharaan" type="number" class="form-control" placeholder="contoh: 112">
+							</div>
+							<div class="form-group">
+								<label>Tahap Panen (dalam m<sup>2</sup>)</label>
+								<input name="i_tahap_panen" type="number" class="form-control" placeholder="contoh: 23">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Tebar Ikan</label>
+								<input name="i_tanggal_tebar_ikan" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Jumlah Ikan (dalam ekor)</label>
+								<input name="i_jumlah_ikan" type="number" class="form-control" placeholder="contoh: 155">
+							</div>
+							<div class="form-group">
+								<label>Tanggal Panen</label>
+								<input name="i_tanggal_panen" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
+							</div>
+							<div class="form-group">
+								<label>Estimasi Hasil Panen (dalam kg)</label>
+								<input name="i_estimasi_hasil_panen" type="number" class="form-control" placeholder="contoh: 103">
 							</div>
 						</div>
 					</div>
@@ -125,19 +200,28 @@
 @endsection
 
 @section('script')
+	<!-- bootstrap datepicker -->
+	<script src="{{ asset('assets') }}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+	
 	<script>
-		$('#detail-tanaman').hide();
 		$('#detail-ternak').hide();
+		$('#detail-tanaman').hide();
+		$('#detail-ikan').hide();
 		
-		function onKomoTypeChange(type){
-			if (type == 'tanaman'){
-				$('#detail-tanaman').show();
-				$('#detail-ternak').hide();
-			}
-			if (type == 'ternak'){
-				$('#detail-tanaman').hide();
-				$('#detail-ternak').show();
-			}
+		function onKomoTypeChangeSelect(selectObject){
+			var k_type = selectObject.options[selectObject.selectedIndex].getAttribute('type');
+			
+			$('#detail-ternak').hide();
+			$('#detail-tanaman').hide();
+			$('#detail-ikan').hide();
+			
+			$('#detail-'+k_type).show();
 		}
+
+		//Date picker
+		$('.datepicker').datepicker({
+			autoclose: true,
+			format: 'yyyy-mm-dd'
+		})
     </script>
 @endsection

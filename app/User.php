@@ -27,7 +27,31 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 	
-	public function lahan_pengurus(){
-		return $this->hasMany('App\Lahan', 'pengurus_id');
+	// PENGURUS
+	public function p_desa(){
+		return $this->hasOne('App\Desa', 'pengurus_id');
+	}
+	
+	public function p_kecamatan(){
+		return $this->hasOne('App\Kecamatan', 'pengurus_id');
+	}
+	
+	public function p_kabupaten(){
+		return $this->hasOne('App\Kabupaten', 'pengurus_id');
+	}
+	
+	public function p_provinsi(){
+		return $this->hasOne('App\Provinsi', 'pengurus_id');
+	}
+	
+	public function lahans(){
+		$lahans = new Lahan;
+		switch($this->role){
+			case 'kordes' :
+				$lahans = $lahans->where('desa_id', $this->p_desa->id);
+			break;
+		}
+		
+		return $lahans->get();
 	}
 }

@@ -8,6 +8,10 @@ class Kecamatan extends Model
 {
     protected $table = 'kecamatan';
 	
+	public function pengurus(){
+		return $this->belongsTo('App\User');
+	}
+	
 	public function kabupaten(){
 		return $this->belongsTo('App\Kabupaten');
 	}

@@ -107,6 +107,7 @@
 								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
 							</div>
 							
+							@if(false)
 							<div class="form-group">
 								<label for="exampleInputEmail1">Lokasi Lahan</label>
 								<div class="alert alert-info">
@@ -137,6 +138,7 @@
 								<br>
 								<div id="map"></div>
 							</div>
+							@endif
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">

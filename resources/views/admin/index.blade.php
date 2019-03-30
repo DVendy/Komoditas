@@ -1,8 +1,8 @@
 @php
-	$admin_prov = App\User::where('role', 'korprov')->get();
-	$admin_kab = App\User::where('role', 'korkab')->get();
-	$admin_kec = App\User::where('role', 'korkec')->get();
-	$admin_desa = App\User::where('role', 'kordes')->get();
+	$admin_prov = App\User::where('role', 'korprov')->with('p_provinsi')->get();
+	$admin_kab = App\User::where('role', 'korkab')->with('p_kabupaten')->get();
+	$admin_kec = App\User::where('role', 'korkec')->with('p_kecamatan')->get();
+	$admin_desa = App\User::where('role', 'kordes')->with('p_desa')->get();
 	$admin = App\User::whereIn('role', ['superadmin', 'admin'])->get();
 @endphp
 
@@ -72,7 +72,7 @@
 			<div class="col-md-9" id="box_des" style="display: none;">
 				<div class="box box-primary box-flat">
 					<div class="box-header with-border">
-						<h3 class="box-title">Admin Desa</h3>
+						<h3 class="box-title">Koordinator Desa</h3>
 					</div>
 					<div class="box-body">
 						<table class="table table-bordered table-striped datatable">
@@ -80,6 +80,7 @@
 								<tr>
 									<th>Nama</th>
 									<th>No. HP</th>
+									<th>Desa</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -88,6 +89,7 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
+									<td>{{ $val->p_desa->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
 										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
@@ -110,6 +112,7 @@
 								<tr>
 									<th>Nama</th>
 									<th>No. HP</th>
+									<th>Kecamatan</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -118,6 +121,7 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
+									<td>{{ $val->p_kecamatan->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
 										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
@@ -140,6 +144,7 @@
 								<tr>
 									<th>Nama</th>
 									<th>No. HP</th>
+									<th>Kabupaten</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -148,6 +153,7 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
+									<td>{{ $val->p_kabupaten->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
 										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
@@ -170,6 +176,7 @@
 								<tr>
 									<th>Nama</th>
 									<th>No. HP</th>
+									<th>Provinsi</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -178,6 +185,7 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
+									<td>{{ $val->p_provinsi->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
 										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>

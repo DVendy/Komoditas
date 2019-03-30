@@ -5,7 +5,7 @@
 @endphp
 
 <ul class="sidebar-menu" data-widget="tree">
-	@if($auth->role == 'desa')
+	@if($auth->role == 'kordes')
 		<li class="header">MAIN MENU</li>
 		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
 		<li @if(preg_match('#^lahan/tanaman#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>

@@ -53,8 +53,9 @@
 								<label for="exampleInputEmail1">Tipe Komoditas</label>
 								<select class="form-control" name="type">
 									<option selected disabled>--Pilih Tipe--</option>
-									<option value="tanaman">Tanaman</option>
 									<option value="ternak">Ternak</option>
+									<option value="tanaman">Tanaman</option>
+									<option value="ikan">Ikan</option>
 								</select>
 							</div>
 							<div class="form-group">

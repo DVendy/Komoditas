@@ -49,8 +49,8 @@ class LahanController extends Controller
 		$validator = Validator::make($request->all(), [
 			'nama' => 'required',
 			'desa_id' => 'required',
-			'lat' => 'required',
-			'long' => 'required',
+			// 'lat' => 'required',
+			// 'long' => 'required',
 			'luas' => 'required',
 			'pemilik' => 'required',
 		], $messages);
@@ -59,11 +59,13 @@ class LahanController extends Controller
             return redirect()->action('LahanController@create')->withErrors($validator)->withInput();
 		
 		$data = new Lahan;
-		$data->pengurus_id = $auth->id;
+		// $data->pengurus_id = $auth->id;
 		$data->desa_id = $request->desa_id;
 		$data->name = $request->nama;
-		$data->lat = $request->lat;
-		$data->long = $request->long;
+		// $data->lat = $request->lat;
+		// $data->long = $request->long;
+		$data->lat = '';
+		$data->long = '';
 		$data->luas = $request->luas;
 		$data->pemilik = $request->pemilik;
 		$data->save();
@@ -79,7 +81,7 @@ class LahanController extends Controller
 	
     public function doAddKomoditas(Request $request, $id)
     {
-		// dd($request->all());
+		dd($request->all());
 		$messages = [
 			'required' => 'Komoditas perlu diisi.',
 		];

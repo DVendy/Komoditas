@@ -8,6 +8,10 @@ class Desa extends Model
 {
     protected $table = 'desa';
 	
+	public function pengurus(){
+		return $this->belongsTo('App\User');
+	}
+	
 	public function kecamatan(){
 		return $this->belongsTo('App\Kecamatan');
 	}
