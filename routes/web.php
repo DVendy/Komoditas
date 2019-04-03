@@ -76,18 +76,22 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::group(['prefix' => 'lahan'], function () {
 		Route::get('/', 'LahanController@index');
+		
+		// LAHAN - KOMODITAS
+		Route::group(['prefix' => 'komoditas'], function () {
+			Route::group(['prefix' => '{type}'], function () {
+				Route::get('/', 'LahanKomoditasController@index');
+				Route::get('/{lk_id}', 'LahanKomoditasController@detail');
+			});
+		});
+		
 		Route::get('/tanaman', 'LahanController@indexTanaman');
-		Route::get('/ternak', 'LahanController@indexTernak');
 		
 		Route::get('/create', 'LahanController@create');
 		Route::post('/do-create', 'LahanController@doCreate');
 		Route::get('/edit/{id}', 'LahanController@edit');
 		Route::post('/do-edit/{id}', 'LahanController@doEdit');
 		Route::get('/delete/{id}', 'LahanController@delete');
-		
-		Route::group(['prefix' => 'komoditas'], function () {
-			Route::get('/delete/{id}', 'LahanController@deleteKomoditas');
-		});
 		
 		Route::group(['prefix' => 'admin'], function () {
 			Route::get('/', 'LahanController@indexAdmin');

@@ -54,4 +54,17 @@ class User extends Authenticatable
 		
 		return $lahans->get();
 	}
+	
+	public function komo_lahans($type){
+		$komo_lahans = new KomoditasLahan;
+		switch($this->role){
+			case 'kordes' :
+				$komo_lahans = $komo_lahans->whereIn('lahan_id', $this->lahans()->pluck('id'));
+			break;
+		}
+		if($type)
+			$komo_lahans = $komo_lahans->where('type', $type);
+		
+		return $komo_lahans->get();
+	}
 }

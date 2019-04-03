@@ -24,9 +24,9 @@
 @section('content')
 	<section class="content-header">
 		<h1>
-			Membuat Lahan
+			Detail Komoditas
 			<small>
-				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Lahan</a>
+				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Komoditas {{ $type }}</a>
 			</small>
 		</h1>
 	</section>
@@ -48,54 +48,32 @@
 							</p>
 						</div>
 					@endif
+								{!! $data->lahan->pemilik !!}
 					<div class="box box-primary box-flat">
 						<div class="box-header with-border">
-							<h3 class="box-title">Formulir Lahan</h3>
+							<h3 class="box-title">Informasi Lahan</h3>
 						</div>
 						<!-- /.box-header -->
 						<!-- form start -->
 						<div class="box-body">
-							@if(false)
-								<div class="form-group">
-									<label for="exampleInputEmail1">Lokasi</label>
-									<div class="row">
-										<div class="col-md-6">
-											<select class="form-control" id="select_prov">
-												<option selected disabled>--Pilih Provinsi--</option>
-												@foreach($provinsi as $val)
-													<option value="{{ $val->id }}">{{ $val->name }}</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="col-md-6">
-											<select class="form-control" id="select_kab">
-												<option selected disabled>--Pilih Kabupaten--</option>
-												@foreach($kabupaten as $val)
-													<option data-prov_id="{{ $val->provinsi_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="col-md-6">
-											<br>
-											<select class="form-control" id="select_kec">
-												<option selected disabled>--Pilih Kecamatan--</option>
-												@foreach($kecamatan as $val)
-													<option data-kab_id="{{ $val->kabupaten_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
-												@endforeach
-											</select>
-										</div>
-										<div class="col-md-6">
-											<br>
-											<select name="desa_id" class="form-control" id="select_desa">
-												<option selected disabled>--Pilih Desa--</option>
-												@foreach($desa as $val)
-													<option data-kec_id="{{ $val->kecamatan_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-								</div>
-							@endif
+							<strong><i class="fa fa-book margin-r-5"></i> Nama</strong>
+							<p class="text-muted">
+								{{ $data->lahan->name }}
+							</p>
+							<hr>
+							
+							<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
+							<p class="text-muted">
+								{{ $data->lahan->luas }} (m<sup>2</sup>)
+							</p>
+							<hr>
+							
+							<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
+							<p class="text-muted">
+								{!! $data->lahan->pemilik !!}
+							</p>
+							<hr>
+							
 							<div class="form-group">
 								<label for="exampleInputEmail1">Nama</label>
 								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Lahan sebagai identifikasi">

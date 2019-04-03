@@ -1,22 +1,28 @@
 @php
 	$auth = Auth::user();
-	$uri = Route::current()->uri;
-	// dd(Route::current());
+	$uri = Request::path();
+	// dd(strpos($uri, '/lahan/komoditas/ternak'));
 @endphp
 
 <ul class="sidebar-menu" data-widget="tree">
 	@if($auth->role == 'kordes')
 		<li class="header">MAIN MENU</li>
 		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
-		<li @if(preg_match('#^lahan/tanaman#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>
-		<li @if(preg_match('#^lahan/ternak#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTernak') }}"><i class="fa fa-map"></i> <span>Komoditas Ternak</span></a></li>
+		
+		<li class="header">KOMODITAS</li>
+		<li @if(strpos($uri, 'lahan/komoditas/ternak') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'ternak') }}"><i class="fa fa-map"></i> <span>Komoditas Ternak</span></a></li>
+		<li @if(strpos($uri, 'lahan/komoditas/tanaman') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'tanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>
+		<li @if(strpos($uri, 'lahan/komoditas/ikan') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'ikan') }}"><i class="fa fa-map"></i> <span>Komoditas Ikan</span></a></li>
 	@endif
 	
 	@if(in_array($auth->role, ['admin', 'superadmin']))
 		<li class="header">MAIN MENU</li>
 		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
-		<li @if(preg_match('#^lahan/tanaman#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>
+		
+		<li class="header">KOMODITAS</li>
 		<li @if(preg_match('#^lahan/ternak#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTernak') }}"><i class="fa fa-map"></i> <span>Komoditas Ternak</span></a></li>
+		<li @if(preg_match('#^lahan/tanaman#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>
+		<li @if(preg_match('#^lahan/ikan#', $uri) === 1) class="active" @endif><a href="{{ action('LahanController@indexTernak') }}"><i class="fa fa-map"></i> <span>Komoditas Ikan</span></a></li>
 	
 		<li class="header">SETTING</li>
 		<li @if(preg_match('#^location#', $uri) === 1) class="active" @endif><a href="{{ action('LocationController@index') }}"><i class="fa fa-map-marker"></i> <span>Lokasi</span></a></li>
