@@ -7,6 +7,7 @@
 <ul class="sidebar-menu" data-widget="tree">
 	@if($auth->role == 'kordes')
 		<li class="header">MAIN MENU</li>
+		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Dashboard</span></a></li>
 		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
 		
 		<li class="header">KOMODITAS</li>

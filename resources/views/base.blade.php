@@ -37,6 +37,9 @@
 		<![endif]-->
 		<!-- Google Font -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		
+		<link rel="stylesheet" href="{{ asset('css') }}/style.css">
+		
 		<style>
 			.box-flat{
 				border-radius: 0;
@@ -82,6 +85,14 @@
 					<span class="sr-only">Toggle navigation</span>
 					</a>
 					<!-- Navbar Right Menu -->
+					<div class="navbar-custom-menu">
+						<ul class="nav navbar-nav">
+							<!-- Messages: style can be found in dropdown.less-->
+							<li>
+							<a>Selamat datang, <b>{{ $auth->name }}</b>!</a>
+							</li>
+						</ul>
+					</div>
 				</nav>
 			</header>
 			<!-- Left side column. contains the logo and sidebar -->

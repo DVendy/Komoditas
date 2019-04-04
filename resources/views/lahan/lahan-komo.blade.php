@@ -80,7 +80,7 @@
 										<td>{{ date('d F Y', strtotime($val->b_tanggal_masuk_ternak)) }}</td>
 										<td>{{ round($val->b_estimasi_hasil_panen, 0) }}</td>
 										<td>
-											<a href="{{ action('LahanKomoditasController@detail', [$type, $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+											<a href="{{ action('LahanKomoditasController@detail', [$type, $val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Detail</a>
 											<a href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 										</td>
 									</tr>

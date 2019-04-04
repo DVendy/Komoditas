@@ -15,4 +15,8 @@ class Lahan extends Model
 	public function fase(){
 		return $this->belongsTo('App\Fase');
 	}
+	
+	public function komoditasLahans(){
+		return $this->hasMany('App\KomoditasLahan');
+	}
 }

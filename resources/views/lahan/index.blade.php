@@ -74,7 +74,7 @@
 									<td>{{ $val->name }}</td>
 									<td>{{ (float)$val->luas }} m<sup>2</sup></td>
 									<td>
-										<a href="{{ action('LahanController@edit', [$val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('LahanController@detail', [$val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Detail</a>
 										<a href="{{ action('LahanController@delete', [$val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>

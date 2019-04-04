@@ -1,8 +1,10 @@
 @php
 	$auth= Auth::user();
-	$komo_tanaman = App\Komoditas::orderBy('type', 'asc')->where('type', 'tanaman')->get();
-	$komo_ternak = App\Komoditas::orderBy('type', 'asc')->where('type', 'ternak')->get();
-	$komo_ikan = App\Komoditas::orderBy('type', 'asc')->where('type', 'ikan')->get();
+	$lahan_komoditas_ids = App\KomoditasLahan::where('lahan_id', $lahan->id)->pluck('komoditas_id');
+	
+	$komo_ternak = App\Komoditas::orderBy('type', 'asc')->where('type', 'ternak')->whereNotIn('id', $lahan_komoditas_ids)->get();
+	$komo_tanaman = App\Komoditas::orderBy('type', 'asc')->where('type', 'tanaman')->whereNotIn('id', $lahan_komoditas_ids)->get();
+	$komo_ikan = App\Komoditas::orderBy('type', 'asc')->where('type', 'ikan')->whereNotIn('id', $lahan_komoditas_ids)->get();
 	$fase = App\Fase::all();
 @endphp
 
@@ -24,9 +26,9 @@
 @section('content')
 	<section class="content-header">
 		<h1>
-			Lahan : {{ $lahan->name	 }}
+			Tambah Komoditas Untuk Lahan : {{ $lahan->name	 }}
 			<small>
-				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Lahan</a>
+				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat hidden-xs"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Lahan</a>
 			</small>
 		</h1>
 	</section>
@@ -100,7 +102,7 @@
 								<input name="b_tanggal_masuk_ternak" type="text" class="form-control datepicker" placeholder="klik untuk memilih tanggal">
 							</div>
 							<div class="form-group">
-								<label>Jumlah TERNAK (dalam ekor)</label>
+								<label>Jumlah Ternak (dalam ekor)</label>
 								<input name="b_jumlah_ternak" type="number" class="form-control" placeholder="contoh: 155">
 							</div>
 							<div class="form-group">

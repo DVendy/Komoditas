@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::group(['prefix' => 'lahan'], function () {
 		Route::get('/', 'LahanController@index');
+		Route::get('/detail/{id}', 'LahanController@detail');
 		
 		// LAHAN - KOMODITAS
 		Route::group(['prefix' => 'komoditas'], function () {

@@ -1,11 +1,5 @@
 @php
 	$auth= Auth::user();
-	$fase = App\Fase::all();
-	
-	$provinsi = App\Provinsi::all();
-	$kabupaten = App\Kabupaten::all();
-	$kecamatan = App\Kecamatan::all();
-	$desa = App\Desa::all();
 @endphp
 
 @extends('base')
@@ -26,108 +20,88 @@
 		<h1>
 			Detail Komoditas
 			<small>
-				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Komoditas {{ $type }}</a>
+				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat hidden-xs"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Komoditas {{ $type }}</a>
 			</small>
 		</h1>
 	</section>
 	<!-- Main content -->
 	<section class="content">
-		<form action="{{ action('LahanController@doCreate') }}" method="POST" role="form">
-			{{ csrf_field() }}
-			<div class="row">
-				<div class="col-md-8">
-					@if($errors->all())
-						<div class="callout callout-danger">
-							<h4>Terjadi kesalahan:</h4>
-							<p>
-								@if($errors->all())
-									@foreach($errors->all() as $key => $value)
-									<li>{{ $value }}</li>
-									@endforeach
-								@endif
-							</p>
-						</div>
-					@endif
-								{!! $data->lahan->pemilik !!}
-					<div class="box box-primary box-flat">
-						<div class="box-header with-border">
-							<h3 class="box-title">Informasi Lahan</h3>
-						</div>
-						<!-- /.box-header -->
-						<!-- form start -->
-						<div class="box-body">
-							<strong><i class="fa fa-book margin-r-5"></i> Nama</strong>
-							<p class="text-muted">
-								{{ $data->lahan->name }}
-							</p>
-							<hr>
-							
-							<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
-							<p class="text-muted">
-								{{ $data->lahan->luas }} (m<sup>2</sup>)
-							</p>
-							<hr>
-							
-							<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
-							<p class="text-muted">
-								{!! $data->lahan->pemilik !!}
-							</p>
-							<hr>
-							
-							<div class="form-group">
-								<label for="exampleInputEmail1">Nama</label>
-								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Lahan sebagai identifikasi">
-							</div>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Luas - dalam satuan Meter persegi (m<sup>2</sup>)</label>
-								<input name="luas" type="number" class="form-control" placeholder="ex: 846.56" step="0.01">
-							</div>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Informasi pemilik lahan</label>
-								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
-							</div>
-							
-							@if(false)
-							<div class="form-group">
-								<label for="exampleInputEmail1">Lokasi Lahan</label>
-								<div class="alert alert-info">
-									<h4><i class="icon fa fa-info"></i> Info</h4>
-									<li>Klik pada map untuk menentukan lokasi lahan.</li>
-									<li>Scroll mouse untuk memperbesar map</li>
-								</div>
-								<div class="row">
-									<div class="col-xs-6">
-										<div class="input-group">
-											<div class="input-group-btn">
-												<button type="button" class="btn btn-warning">Latitude</button>
-											</div>
-											<!-- /btn-group -->
-											<input type="text" id="lat" class="form-control" readonly="readonly" name="lat">
-										</div>
-									</div>
-									<div class="col-xs-6">
-										<div class="input-group">
-											<div class="input-group-btn">
-												<button type="button" class="btn btn-warning">Longitude</button>
-											</div>
-											<!-- /btn-group -->
-											<input type="text" id="long" class="form-control" readonly="readonly" name="long">
-										</div>
-									</div>
-								</div>
-								<br>
-								<div id="map"></div>
-							</div>
-							@endif
-						</div>
-						<!-- /.box-body -->
-						<div class="box-footer">
-							<button type="submit" class="btn btn-primary btn-flat pull-right">Simpan</button>
-						</div>
+		<div class="row">
+			<div class="col-xs-4 col-md-1">
+				<a href="#" class="btn btn-app btn-block bg-orange ml-0">
+					<i class="fa fa-edit"></i> Rekap Harian
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<h3 class="box-title">Informasi Lahan</h3>
+					</div>
+					<!-- /.box-header -->
+					<!-- form start -->
+					<div class="box-body">
+						<strong><i class="fa fa-book margin-r-5"></i> Nama</strong>
+						<p class="text-muted">
+							{{ $data->lahan->name }}
+						</p>
+						<hr>
+						
+						<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
+						<p class="text-muted">
+							{{ $data->lahan->luas }} (m<sup>2</sup>)
+						</p>
+						<hr>
+						
+						<strong><i class="fa fa-book margin-r-5"></i> Pemilik </strong>
+						<p class="text-muted">
+							{!! nl2br($data->lahan->pemilik) !!}
+						</p>
+						<hr>
+						
+						<a href="#" class="btn btn-primary btn-block"><b><i class="fa fa-edit"></i> Ubah info lahan</b></a>
 					</div>
 				</div>
 			</div>
-		</form>
+			
+			<div class="col-md-8">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<select class="form-control">
+							<option>option 1</option>
+							<option>option 2</option>
+							<option>option 3</option>
+							<option>option 4</option>
+							<option>option 5</option>
+						</select>
+					</div>
+					<!-- /.box-header -->
+					<!-- form start -->
+					<div class="box-body">
+						<strong><i class="fa fa-book margin-r-5"></i> Nama</strong>
+						<p class="text-muted">
+							{{ $data->lahan->name }}
+						</p>
+						<hr>
+						
+						<strong><i class="fa fa-book margin-r-5"></i> Luas </strong>
+						<p class="text-muted">
+							{{ $data->lahan->luas }} (m<sup>2</sup>)
+						</p>
+						<hr>
+						
+						<strong><i class="fa fa-book margin-r-5"></i> Pemilik </strong>
+						<p class="text-muted">
+							{!! nl2br($data->lahan->pemilik) !!}
+						</p>
+						<hr>
+						
+						<a href="#" class="btn btn-primary btn-block"><b><i class="fa fa-edit"></i> Ubah info lahan</b></a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 @endsection
 

@@ -63,6 +63,13 @@ class LahanController extends Controller
 		return redirect()->action('LahanController@addKomoditas', $data->id);
 	}
 	
+    public function detail($id)
+    {
+		$lahan = Lahan::find($id);
+        return view('lahan.detail')
+			->with('lahan', $lahan);
+    }
+	
     public function addKomoditas($id)
     {
 		$lahan = Lahan::find($id);
@@ -145,7 +152,7 @@ class LahanController extends Controller
 		
 		$data->save();
 		
-		return redirect()->action('LahanController@index')->withCreate('Lahan');
+		return redirect()->action('LahanController@detail', [$id, 'kl_id='.$data->id]);
 	}
 	
     public function delete($id)
