@@ -13,7 +13,8 @@
 
 Route::get('/tes', function(){
 	//die();
-	dd(mt_rand(107*10000000, 111*10000000) / 10000000);
+	$faker = Faker\Factory::create();
+	dd( mt_rand(10, 200));
 });
 
 Route::get('/god/admin', function(){
