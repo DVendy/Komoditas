@@ -13,8 +13,7 @@
 
 Route::get('/tes', function(){
 	//die();
-	$faker = Faker\Factory::create();
-	dd( mt_rand(10, 200));
+	dd(date('Y-m-d'));
 });
 
 Route::get('/god/admin', function(){
@@ -83,8 +82,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::group(['prefix' => 'komoditas'], function () {
 			Route::group(['prefix' => '{type}'], function () {
 				Route::get('/', 'LahanKomoditasController@index');
-				Route::get('/{lk_id}', 'LahanKomoditasController@detail');
 			});
+			
+			Route::get('/detail/{id}', 'LahanKomoditasController@detail');
+			Route::post('/detail/{id}', 'LahanKomoditasController@doRekap');
 		});
 		
 		Route::get('/tanaman', 'LahanController@indexTanaman');

@@ -32,7 +32,7 @@
 	</section>
 	<!-- Main content -->
 	<section class="content">
-		<form action="{{ action('LahanController@doCreate') }}" method="POST" role="form">
+		<form action="{{ action('LahanController@doEdit', $lahan->id) }}" method="POST" role="form">
 			{{ csrf_field() }}
 			<div class="row">
 				<div class="col-md-8">
@@ -98,15 +98,15 @@
 							@endif
 							<div class="form-group">
 								<label for="exampleInputEmail1">Nama</label>
-								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Lahan sebagai identifikasi">
+								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Lahan sebagai identifikasi" value="{{ $lahan->name }}">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Luas - dalam satuan Meter persegi (m<sup>2</sup>)</label>
-								<input name="luas" type="number" class="form-control" placeholder="ex: 846.56" step="0.01">
+								<input name="luas" type="number" class="form-control" placeholder="ex: 846.56" step="0.01" value="{{ $lahan->luas }}">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Informasi pemilik lahan</label>
-								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
+								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb">{!! $lahan->pemilik !!}</textarea>
 							</div>
 							
 							@if(true)
@@ -160,7 +160,7 @@
 		var infowindow;
 		
 		function initMap() {
-			var myCenter=new google.maps.LatLng(-7.284669945290895, 109.51414789118007);
+			var myCenter = new google.maps.LatLng(-7.284669945290895, 109.51414789118007);
 			
 			map = new google.maps.Map(document.getElementById('map'), {
 				zoom: 7,
@@ -172,18 +172,9 @@
 				placeMarker(event.latLng);
 			});
 			
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					var pos = {
-						lat: position.coords.latitude,
-						lng: position.coords.longitude
-					};
-
-					map.setCenter(pos);
-					placeMarker(pos);
-				}, function() {
-				});
-			}
+			@if($lahan->lat != '')
+				placeMarker(new google.maps.LatLng({{ $lahan->lat }}, {{ $lahan->long }}));
+			@endif
 		}
 
 		function placeMarker(location) {
@@ -203,65 +194,7 @@
 			(document.getElementById("long")).value = location.lng();
 
 		}
-		// select
-		function ChangeProv() {
-			var curProv = $('#select_prov').val(); //Get the current select project
-			$('#select_kab option').each(function () { //Loop through each option
-				var curKabProv = $(this).attr('data-prov_id'); //Put the array of projects in a variable
-				if (curKabProv == curProv) { //If current project ID is in array of projects
-					$(this).show(); //Show the option
-				} else { // Else if current project ID is NOT in array of projects
-					$(this).hide(); //hide the option
-				}
-			});
-			$('#select_kec option').each(function () { //Loop through each option
-				$(this).hide(); //hide the option
-			});
-			$('#select_desa option').each(function () { //Loop through each option
-				$(this).hide(); //hide the option
-			});
-		}
-		
-		function ChangeKab() {
-			var curProv = $('#select_kab').val(); //Get the current select project
-			$('#select_kec option').each(function () { //Loop through each option
-				var curKabProv = $(this).attr('data-kab_id'); //Put the array of projects in a variable
-				if (curKabProv == curProv) { //If current project ID is in array of projects
-					$(this).show(); //Show the option
-				} else { // Else if current project ID is NOT in array of projects
-					$(this).hide(); //hide the option
-				}
-			});
-			$('#select_desa option').each(function () { //Loop through each option
-				$(this).hide(); //hide the option
-			});
-		}
-		
-		function ChangeKec() {
-			var curKec = $('#select_kec').val(); //Get the current select project
-			$('#select_desa option').each(function () { //Loop through each option
-				var curkec_id = $(this).attr('data-kec_id'); //Put the array of projects in a variable
-				if (curkec_id == curKec) { //If current project ID is in array of projects
-					$(this).show(); //Show the option
-				} else { // Else if current project ID is NOT in array of projects
-					$(this).hide(); //hide the option
-				}
-			});
-		}
-		
-		$('#select_prov').on('change', function() { //When we change the project, call the function
-			ChangeProv();
-		});
-		$('#select_kab').on('change', function() { //When we change the project, call the function
-			ChangeKab();
-		});
-		$('#select_kec').on('change', function() { //When we change the project, call the function
-			ChangeKec();
-		});
-		
-		ChangeProv(); //Call the function when we run the page
-		ChangeKab(); //Call the function when we run the page
-		ChangeKec(); //Call the function when we run the page
+
     </script>
 	
 	<script async defer

@@ -120,12 +120,14 @@
 			markers = [];
 			
 			@foreach($lahan as $val)
-				markers.push(new google.maps.Marker({
-					position: {lat: {{ $val->lat }}, lng: {{ $val->long }}},
-					map: map,
-					label: '{{ $val->name }}',
-					animation: google.maps.Animation.DROP,
-				}));
+				@if($val->lat != '')
+					markers.push(new google.maps.Marker({
+						position: {lat: {{ $val->lat }}, lng: {{ $val->long }}},
+						map: map,
+						label: '{{ $val->name }}',
+						animation: google.maps.Animation.DROP,
+					}));
+				@endif
 			@endforeach
 			
 			// Cluster

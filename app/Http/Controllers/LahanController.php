@@ -6,6 +6,7 @@ use App\User;
 use App\Lahan;
 use App\Komoditas;
 use App\KomoditasLahan;
+use App\HistoryKomoditasLahan;
 
 use Illuminate\Http\Request;
 use Validator;
@@ -25,6 +26,13 @@ class LahanController extends Controller
     public function create()
     {
         return view('lahan.create');
+    }
+	
+    public function edit($id)
+    {
+		$lahan = Lahan::find($id);
+        return view('lahan.edit')
+			->with('lahan', $lahan);
     }
 	
     public function doCreate(Request $request)
@@ -52,15 +60,65 @@ class LahanController extends Controller
 		// $data->pengurus_id = $auth->id;
 		$data->desa_id = $auth->p_desa->id;
 		$data->name = $request->nama;
-		// $data->lat = $request->lat;
-		// $data->long = $request->long;
-		$data->lat = '';
-		$data->long = '';
+		
+		if($request->lat){
+			$data->lat = $request->lat;
+			$data->long = $request->long;
+		}else{		
+			$data->lat = '';
+			$data->long = '';
+		}
+		
 		$data->luas = $request->luas;
 		$data->pemilik = $request->pemilik;
 		$data->save();
 		
 		return redirect()->action('LahanController@addKomoditas', $data->id);
+	}
+	
+    public function doEdit($id, Request $request)
+    {
+		$auth= \Auth::user();
+		
+		// dd($request->all());
+		$messages = [
+			'required' => 'Kolom :attribute perlu diisi.',
+		];
+		
+		$validator = Validator::make($request->all(), [
+			'nama' => 'required',
+			// 'desa_id' => 'required',
+			// 'lat' => 'required',
+			// 'long' => 'required',
+			'luas' => 'required',
+			'pemilik' => 'required',
+		], $messages);
+
+        if ($validator->fails())
+            return redirect()->action('LahanController@create')->withErrors($validator)->withInput();
+		
+		$data = Lahan::find($id);
+
+        if (!$data)
+            return redirect()->action('LahanController@create');
+		
+		// $data->pengurus_id = $auth->id;
+		// $data->desa_id = $auth->p_desa->id;
+		$data->name = $request->nama;
+		
+		if($request->lat){
+			$data->lat = $request->lat;
+			$data->long = $request->long;
+		}else{		
+			$data->lat = '';
+			$data->long = '';
+		}
+		
+		$data->luas = $request->luas;
+		$data->pemilik = $request->pemilik;
+		$data->save();
+		
+		return redirect()->action('LahanController@detail', $data->id);
 	}
 	
     public function detail($id)
@@ -151,6 +209,37 @@ class LahanController extends Controller
 		}
 		
 		$data->save();
+		
+		$history = new HistoryKomoditasLahan;
+		$history->komoditas_lahan_id = $data->id;
+		$history->komoditas_id = $data->komoditas_id;
+		$history->lahan_id = $data->lahan_id;
+		$history->type = $data->type;
+		$history->b_luas_kandang = $data->b_luas_kandang;
+		$history->b_luas_kandang = $data->b_luas_kandang;
+		$history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
+		$history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
+		$history->b_tanggal_masuk_ternak = $data->b_tanggal_masuk_ternak;
+		$history->b_jumlah_ternak = $data->b_jumlah_ternak;
+		$history->b_tanggal_panen = $data->b_tanggal_panen;
+		$history->b_estimasi_hasil_panen = $data->b_estimasi_hasil_panen;
+		$history->t_luas_lahan = $data->t_luas_lahan;
+		$history->t_tahap_persiapan = $data->t_tahap_persiapan;
+		$history->t_tahap_pemeliharaan = $data->t_tahap_pemeliharaan;
+		$history->t_tahap_panen = $data->t_tahap_panen;
+		$history->t_tanggal_mulai_tanam = $data->t_tanggal_mulai_tanam;
+		$history->t_jumlah_tanaman = $data->t_jumlah_tanaman;
+		$history->t_estimasi_hasil_panen = $data->t_estimasi_hasil_panen;
+		$history->i_luas_kolam = $data->i_luas_kolam;
+		$history->i_tahap_persiapan = $data->i_tahap_persiapan;
+		$history->i_tahap_pemeliharaan = $data->i_tahap_pemeliharaan;
+		$history->i_tahap_panen = $data->i_tahap_panen;
+		$history->i_tanggal_tebar_ikan = $data->i_tanggal_tebar_ikan;
+		$history->i_jumlah_ikan = $data->i_jumlah_ikan;
+		$history->i_tanggal_panen = $data->i_tanggal_panen;
+		$history->i_estimasi_hasil_panen = $data->i_estimasi_hasil_panen;
+		$history->other = $data->other;
+		$history->save();
 		
 		return redirect()->action('LahanController@detail', [$id, 'kl_id='.$data->id]);
 	}

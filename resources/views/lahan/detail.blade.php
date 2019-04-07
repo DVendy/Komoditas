@@ -64,7 +64,7 @@
 						</p>
 						<hr>
 						
-						<a href="#" class="btn btn-primary btn-block"><b><i class="fa fa-edit"></i> Ubah info lahan</b></a>
+						<a href="{{ action('LahanController@edit', $lahan->id) }}" class="btn btn-primary btn-block" ><b><i class="fa fa-edit"></i> Ubah info lahan</b></a>
 					</div>
 				</div>
 			</div>
@@ -109,7 +109,7 @@
 										{{ $kl->b_estimasi_hasil_panen }} ekor</b></span></a></li>
 								</ul>
 								<hr class="mg-0">
-								<a href="#" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
+								<a href="{{ action('LahanKomoditasController@detail', $kl->id) }}" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
 							</div>
 						@endif
 						
@@ -134,7 +134,7 @@
 										{{ $kl->t_estimasi_hasil_panen }} kg</b></span></a></li>
 								</ul>
 								<hr class="mg-0">
-								<a href="#" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
+								<a href="{{ action('LahanKomoditasController@detail', $kl->id) }}" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
 							</div>
 						@endif
 						
@@ -166,7 +166,7 @@
 										{{ $kl->i_estimasi_hasil_panen }} kg</b></span></a></li>
 								</ul>
 								<hr class="mg-0">
-								<a href="#" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
+								<a href="{{ action('LahanKomoditasController@detail', $kl->id) }}" class="btn bg-orange btn-block mg-10" style="width: auto;"><b><i class="fa fa-edit"></i> Rekap Harian</b></a>
 							</div>
 						@endif
 					@endforeach

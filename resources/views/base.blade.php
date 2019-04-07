@@ -72,7 +72,7 @@
 			<!-- Main Header -->
 			<header class="main-header">
 				<!-- Logo -->
-				<a href="index2.html" class="logo">
+				<a href="{{ url('/') }}" class="logo">
 					<!-- mini logo for sidebar mini 50x50 pixels -->
 					<span class="logo-mini"><b>K</b>id</span>
 					<!-- logo for regular state and mobile devices -->
@@ -102,7 +102,7 @@
 					<!-- Sidebar user panel (optional) -->
 					<div class="user-panel">
 						<div class="pull-left image">
-							<img src="{{ asset('assets') }}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+							<img src="{{ asset('assets') }}/dist/img/avatar5.png" class="img-circle" alt="User Image">
 						</div>
 						<div class="pull-left info">
 							<p>{{ $auth->name }}</p>
