@@ -3,6 +3,30 @@
 	$overview['lahan'] = App\Lahan::count();
 	$overview['desa'] = App\Desa::count();
 	$overview['kordes'] = App\User::where('role', 'kordes')->count();
+	
+	$komoditas = [];
+	foreach(App\Komoditas::orderBy('type', 'desc')->get() as $val){
+		$komoditas[$val->type][] = $val;
+	}
+	
+	$hasil_ternak = [];
+	
+	$query = \DB::select("SELECT komoditas_id, SUM(b_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(b_tanggal_panen, '%Y-%m-%d') as 'tanggal_panen' FROM komoditas_lahan WHERE (b_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY komoditas_id, tanggal_panen");
+	foreach($query as $val){
+		$hasil_ternak[$val->komoditas_id][] = $val;
+	}
+	
+	$query = \DB::select("SELECT komoditas_id, SUM(t_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(t_tanggal_panen, '%Y-%m-%d') as 'tanggal_panen' FROM komoditas_lahan WHERE (t_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY komoditas_id, tanggal_panen");
+	foreach($query as $val){
+		$hasil_ternak[$val->komoditas_id][] = $val;
+	}
+	
+	$query = \DB::select("SELECT komoditas_id, SUM(i_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(i_tanggal_panen, '%Y-%m-%d') as 'tanggal_panen' FROM komoditas_lahan WHERE (i_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY komoditas_id, tanggal_panen");
+	foreach($query as $val){
+		$hasil_ternak[$val->komoditas_id][] = $val;
+	}
+	
+	// dd($hasil_ternak);
 ?>
 
 @extends('base')
@@ -69,58 +93,80 @@
 			</div>
 			<!-- /.col -->
 		</div>      
-		<div class="row">
-			<!-- Left col -->
-			<section class="col-lg-7 connectedSortable">
-				<!-- Custom tabs (Charts with tabs)-->
-				<div class="nav-tabs-custom">
-					<!-- Tabs within a box -->
-					<ul class="nav nav-tabs pull-right">
-						<li class="active">
-							<a href="#revenue-chart" data-toggle="tab">Area</a>
-						</li>
-						<li>
-							<a href="#sales-chart" data-toggle="tab">Donut</a>
-						</li>
-						<li class="pull-left header">
-							<i class="fa fa-inbox"></i> Sales
-						</li>
-					</ul>
-					<div class="tab-content no-padding">
-						<!-- Morris chart - Sales -->
-						<div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-						<div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+		@foreach($komoditas as $key => $val)
+			<div class="row">
+				<!-- Left col -->
+				<section class="col-lg-12 connectedSortable">
+					<!-- Custom tabs (Charts with tabs)-->
+					<div class="nav-tabs-custom">
+						<!-- Tabs within a box -->
+						<ul class="nav nav-tabs pull-right">
+							@foreach($val as $i => $t)
+								<li @if($i == 0) class="active" @endif>
+									<a href="#chart-{{ $t->id }}" data-toggle="tab">{{ $t->name }}</a>
+								</li>
+							@endforeach
+							<li class="pull-left header">
+								<i class="fa fa-inbox"></i> {{ ucfirst($key) }}
+							</li>
+						</ul>
+						<div class="tab-content no-padding">
+							<!-- Morris chart - Sales -->
+							@foreach($val as $i => $t)
+								<div class="chart tab-pane @if($i == 0) active @endif" id="chart-{{ $t->id }}" style="position: relative; height: 300px;"></div>
+							@endforeach
+						</div>
 					</div>
-				</div>
-				<!-- /.nav-tabs-custom -->
+					<!-- /.nav-tabs-custom -->
+				</section>
 			</div>
-		</div>
+		@endforeach
 	</section>
 @endsection
 
 @section('script')
-	<!-- Morris.js charts -->
-	<script src="{{ asset('assets') }}/bower_components/raphael/raphael.min.js"></script>
-	<script src="{{ asset('assets') }}/bower_components/morris.js/morris.min.js"></script>
+	<!-- ChartJS -->
+	<script src="{{ asset('assets') }}/bower_components/chart.js/Chart.js"></script>
 	
 	<script src="{{ asset('js') }}/dashboard.js"></script>
 	
 	<script>
 		$(function (){
-			var data = [
-				  { tanggal: '2019-01-01', item1: 2666},
-				  { tanggal: '2019-01-02', item1: 2778},
-				  { tanggal: '2019-01-03', item1: 4912},
-				  { tanggal: '2019-01-04', item1: 3767},
-				  { tanggal: '2019-01-05', item1: 6810},
-				  { tanggal: '2019-01-06', item1: 5670},
-				  { tanggal: '2019-01-07', item1: 4820},
-				  { tanggal: '2019-01-08', item1: 15073},
-				  { tanggal: '2019-01-09', item1: 10687},
-				  { tanggal: '2019-01-10', item1: 8432}
-				];
-				
-			chart('revenue-chart', data);
+			@foreach($komoditas as $key => $val)
+				@foreach($val as $i => $t)
+					@if(isset($hasil_ternak[$t->id]))
+					var chart_{{ $t->id }} = new Morris.Bar({
+						element   : 'chart-{{ $t->id }}',
+						resize    : true,
+						data      : [
+								@foreach($hasil_ternak[$t->id] as $hasil)
+								  { tanggal: '{{ $hasil->tanggal_panen }}', item1: {{ $hasil->hasil_panen }}},
+								@endforeach
+								],
+						xkey      : 'tanggal',
+						ykeys     : ['item1'],
+						labels    : ['Item 1'],
+						lineColors: ['#3c8dbc'],
+						hideHover : 'auto',
+						xLabelFormat: function (x) { return x.getDate().toString(); }
+					});
+					@endif
+				@endforeach
+			@endforeach
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+			  var target = $(e.target).attr("href") // activated tab
+
+			  switch (target) {
+				@foreach($komoditas as $key => $val)
+					@foreach($val as $i => $t)
+					case "#chart-{{ $t->id }}":
+					  chart_{{ $t->id }}.redraw();
+					  $(window).trigger('resize');
+					  break;
+					@endforeach
+				@endforeach
+			  }
+			});
 		});
 	</script>
 @endsection

@@ -8,6 +8,7 @@ function chart(el_id, data){
     labels    : ['Item 1'],
     lineColors: ['#3c8dbc'],
     hideHover : 'auto',
+	resize: true,
 	xLabelFormat: function (x) { return x.getDate().toString(); }
   });
 }
