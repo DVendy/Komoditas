@@ -109,7 +109,7 @@
 								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
 							</div>
 							
-							@if(true)
+							@if(false)
 							<div class="form-group">
 								<label for="exampleInputEmail1">Lokasi Lahan</label>
 								<div class="alert alert-info">
