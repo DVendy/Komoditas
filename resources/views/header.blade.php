@@ -19,6 +19,7 @@
 	@if(in_array($auth->role, ['admin', 'superadmin']))
 		<li class="header">MAIN MENU</li>
 		<li @if($uri == '/') class="active" @endif><a href="{{ action('DashboardController@index') }}"><i class="fa fa-map"></i> <span>Dashboard</span></a></li>
+		<li @if(strpos($uri, 'report') !== false) class="active" @endif><a href="{{ action('ReportController@index') }}"><i class="fa fa-list-alt"></i> <span>Report</span></a></li>
 		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
 		
 		<li class="header">KOMODITAS</li>

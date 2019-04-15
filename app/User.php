@@ -65,6 +65,6 @@ class User extends Authenticatable
 		if($type)
 			$komo_lahans = $komo_lahans->where('type', $type);
 		
-		return $komo_lahans->get();
+		return $komo_lahans->with(['komoditas', 'lahan'])->get();
 	}
 }

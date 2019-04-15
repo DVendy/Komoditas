@@ -47,6 +47,11 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('/delete/{id}', 'AdminController@delete');
 	});
 	
+	Route::group(['prefix' => 'report'], function () {
+		Route::get('/', 'ReportController@index');
+		Route::get('/lahan-kecamatan', 'ReportController@lahanKecamatan');
+	});
+	
 	Route::group(['prefix' => 'location'], function () {
 		Route::get('/', 'LocationController@index');
 		

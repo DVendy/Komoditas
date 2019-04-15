@@ -1,8 +1,8 @@
 @php
-	$provinsi = App\Provinsi::all();
-	$kabupaten = App\Kabupaten::all();
-	$kecamatan = App\Kecamatan::all();
-	$desa = App\Desa::all();
+	$provinsi = App\Provinsi::get();
+	$kabupaten = App\Kabupaten::with(['provinsi'])->get();
+	$kecamatan = App\Kecamatan::with(['kabupaten.provinsi'])->get();
+	$desa = App\Desa::with(['kecamatan.kabupaten.provinsi'])->get();
 @endphp
 
 @extends('base')
