@@ -30,8 +30,10 @@
 		<li class="header">SETTING</li>
 		<li @if(preg_match('#^location#', $uri) === 1) class="active" @endif><a href="{{ action('LocationController@index') }}"><i class="fa fa-map-marker"></i> <span>Lokasi</span></a></li>
 		<li @if(preg_match('#^admin#', $uri) === 1) class="active" @endif><a href="{{ action('AdminController@index') }}"><i class="fa fa-user"></i> <span>Admin</span></a></li>
-		<li @if(preg_match('#^komoditas#', $uri) === 1) class="active" @endif><a href="{{ action('KomoditasController@index') }}"><i class="fa fa-map"></i> <span>Komoditas</span></a></li>
 	
+		@if(in_array($auth->role, ['superadmin']))
+			<li @if(preg_match('#^komoditas#', $uri) === 1) class="active" @endif><a href="{{ action('KomoditasController@index') }}"><i class="fa fa-map"></i> <span>Komoditas</span></a></li>
+		@endif
 	@endif
 	<hr>
 	<li><a href="{{ action('Auth\LoginController@logout') }}"><i class="glyphicon glyphicon-log-out"></i> <span>Keluar</span></a></li>

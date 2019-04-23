@@ -1,4 +1,5 @@
 @php
+	$auth = Auth::user();
 	$provinsi = App\Provinsi::orderBy('name')->get();
 	$kabupaten = App\Kabupaten::orderBy('name')->get();
 	$kecamatan = App\Kecamatan::orderBy('name')->get();
@@ -50,8 +51,11 @@
 								<label for="exampleInputEmail1">Role</label>
 								<select name="role" class="form-control" id="select_role" onchange="changeRole()">
 									<option selected disabled>--Pilih Role--</option>
+									<option value="kordes">Admin Desa</option>
 									<option value="admin">Admin</option>
-									<option value="desa">Admin Desa</option>
+									@if(in_array($auth->role, ['superadmin']))
+										<option value="superadmin">Super Admin</option>
+									@endif
 								</select>
 							</div>
 							
@@ -59,7 +63,7 @@
 								<div class="form-group">
 									<label for="exampleInputEmail1">Provinsi</label>
 									<select class="form-control" id="select_prov">
-										<option selected disabled>--Pilih Provinsi--</option>
+										<option value="" selected disabled>--Pilih Provinsi--</option>
 										@foreach($provinsi as $val)
 											<option value="{{ $val->id }}">{{ $val->name }}</option>
 										@endforeach
@@ -68,7 +72,7 @@
 								<div class="form-group">
 									<label for="exampleInputEmail1">Kabupaten</label>
 									<select class="form-control" id="select_kab">
-										<option selected disabled>--Pilih Kabupaten--</option>
+										<option value="" selected disabled>--Pilih Kabupaten--</option>
 										@foreach($kabupaten as $val)
 											<option data-prov_id="{{ $val->provinsi_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
 										@endforeach
@@ -77,7 +81,7 @@
 								<div class="form-group">
 									<label for="exampleInputEmail1">Kecamatan</label>
 									<select class="form-control" id="select_kec">
-										<option selected disabled>--Pilih Kecamatan--</option>
+										<option value="" selected disabled>--Pilih Kecamatan--</option>
 										@foreach($kecamatan as $val)
 											<option data-kab_id="{{ $val->kabupaten_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
 										@endforeach
@@ -86,7 +90,7 @@
 								<div class="form-group">
 									<label for="exampleInputEmail1">Desa</label>
 									<select name="desa_id" class="form-control" id="select_des">
-										<option selected disabled>--Pilih Desa--</option>
+										<option value="" selected disabled>--Pilih Desa--</option>
 										@foreach($desa as $val)
 											<option data-kec_id="{{ $val->kecamatan_id }}" value="{{ $val->id }}">{{ $val->name }}</option>
 										@endforeach
@@ -113,7 +117,7 @@
 							</div>
 							<div class="form-group" id="form_email">
 								<label for="exampleInputEmail1">Alamat Email</label>
-								<input name="email" type="email" class="form-control" placeholder="email@domain.com">
+								<input name="email" type="text" class="form-control" placeholder="email@domain.com">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Nomor HP</label>
@@ -142,19 +146,24 @@
 
 @section('script')
 	<script>
+		$('#admin_desa').hide();
+		
 		function changeRole(){
 			var role = $('#select_role').val();
 			
-			if(role == 'desa'){
+			if(role == 'kordes'){
 				$('#form_email').hide();
-				// $('#admin_desa').show();
+				$('#admin_desa').show();
 			}else{
 				$('#form_email').show();
-				// $('#admin_desa').hide();
+				$('#admin_desa').hide();
 			}
 		}
 		
 		function ChangeProv() {
+			$('#select_kab').val('');
+			$('#select_kec').val('');
+			$('#select_des').val('');
 			var curProv = $('#select_prov').val(); //Get the current select project
 			$('#select_kab option').each(function () { //Loop through each option
 				var curKabProv = $(this).attr('data-prov_id'); //Put the array of projects in a variable
@@ -167,6 +176,8 @@
 		}
 		
 		function ChangeKab() {
+			$('#select_kec').val('');
+			$('#select_des').val('');
 			var curProv = $('#select_kab').val(); //Get the current select project
 			$('#select_kec option').each(function () { //Loop through each option
 				var curKabProv = $(this).attr('data-kab_id'); //Put the array of projects in a variable
@@ -179,6 +190,7 @@
 		}
 		
 		function ChangeKec() {
+			$('#select_des').val('');
 			var curProv = $('#select_kec').val(); //Get the current select project
 			$('#select_des option').each(function () { //Loop through each option
 				var curKabProv = $(this).attr('data-kec_id'); //Put the array of projects in a variable
@@ -193,7 +205,6 @@
 		ChangeProv(); //Call the function when we run the page
 		ChangeKab(); //Call the function when we run the page
 		ChangeKec(); //Call the function when we run the page
-		$('#admin_desa').hide();
 		
 		$('#select_prov').on('change', function() { //When we change the project, call the function
 			ChangeProv();

@@ -45,6 +45,8 @@ class User extends Authenticatable
 	}
 	
 	public function lahans(){
+		if(!$this->p_desa)
+			return null;
 		$lahans = new Lahan;
 		switch($this->role){
 			case 'kordes' :

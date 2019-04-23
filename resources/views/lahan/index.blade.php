@@ -2,7 +2,7 @@
 	$auth = Auth::user();
 	
 	if($auth->role == 'kordes')
-		$lahan = Auth::user()->lahans();
+		$lahan = $auth->lahans();
 	else
 		$lahan = App\Lahan::with(['desa.kecamatan.kabupaten.provinsi'])->get();
 	// dd($lahan);

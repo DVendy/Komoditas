@@ -1,9 +1,11 @@
 @php
+	$auth = Auth::user();
 	$admin_prov = App\User::where('role', 'korprov')->with('p_provinsi')->get();
 	$admin_kab = App\User::where('role', 'korkab')->with('p_kabupaten')->get();
 	$admin_kec = App\User::where('role', 'korkec')->with('p_kecamatan')->get();
 	$admin_desa = App\User::where('role', 'kordes')->with('p_desa')->get();
-	$admin = App\User::whereIn('role', ['superadmin', 'admin'])->get();
+	$admin = App\User::where('role', 'admin')->get();
+	$sadmin = App\User::where('role', 'superadmin')->get();
 @endphp
 
 @extends('base')
@@ -26,6 +28,7 @@
 
 @section('content')
 	<section class="content-header">
+		@include('alert')
 		<h1>
 			Admin
 			<small>
@@ -64,6 +67,11 @@
 							<li class="my-li"><a href="#" onclick="showBox(this, '#box_admin')"><i class="fa fa-inbox"></i> Admin
 								<span class="label label-primary pull-right">{{ $admin->count() }}</span></a>
 							</li>
+							@if(in_array($auth->role, ['superadmin']))
+								<li class="my-li"><a href="#" onclick="showBox(this, '#box_sadmin')"><i class="fa fa-inbox"></i> Super Admin
+									<span class="label label-primary pull-right">{{ $sadmin->count() }}</span></a>
+								</li>
+							@endif
 						</ul>
 					</div>
 					<!-- /.box-body -->
@@ -89,7 +97,7 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
-									<td>{{ $val->p_desa->name }}</td>
+									<td>{{ $val->p_desa }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
 										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
@@ -229,6 +237,38 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-9" id="box_sadmin" style="display: none;">
+				<div class="box box-primary box-flat">
+					<div class="box-header with-border">
+						<h3 class="box-title">Super Admin</h3>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered table-striped datatable">
+							<thead>
+								<tr>
+									<th>Nama</th>
+									<th>No. HP</th>
+									<th>Email</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($sadmin as $val)
+								<tr>
+									<td>{{ $val->name }}</td>
+									<td>{{ $val->phone }}</td>
+									<td>{{ $val->email }}</td>
+									<td>
+										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
+										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+									</td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 @endsection
@@ -249,6 +289,7 @@
 			$('#box_kab').hide();
 			$('#box_prov').hide();
 			$('#box_admin').hide();
+			$('#box_sadmin').hide();
 		}
 		
 		function showBox(asd, id){

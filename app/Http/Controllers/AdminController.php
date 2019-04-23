@@ -37,13 +37,13 @@ class AdminController extends Controller
      */
     public function doCreate(Request $request)
     {
-		// dd($request->all());
-		if($request->role == 'desa'){
+		// dd(str_replace([' ', '-', '+'], '', $request->input('phone')));
+		if($request->role == 'kordes'){
 			$validator = Validator::make($request->all(), [
 				'name' => 'required',
-				'role' => 'required|in:desa,admin,superadmin',
+				'role' => 'required|in:kordes,admin,superadmin',
 				'phone' => 'required|unique:users',
-				// 'desa_id' => 'required',
+				'desa_id' => 'required',
 				'password' => 'required|confirmed',
 			]);
 		}else{
@@ -60,11 +60,11 @@ class AdminController extends Controller
 
         $admin = new User;
         $admin->name = $request->input('name');
-        $admin->phone = $request->input('phone');
+        $admin->phone = str_replace([' ', '-', '+'], '', $request->input('phone'));
         $admin->role = $request->input('role');
         $admin->password = Hash::make($request->input('password'));
 		
-		if($admin->role == 'desa')
+		if($admin->role == 'kordes')
 			$admin->email = $admin->phone;
 		else
 			$admin->email = $request->input('email');
@@ -72,10 +72,9 @@ class AdminController extends Controller
         $admin->save();
 
 		//ROLE
-		// if($admin->role == 'desa'){
-		if(false){
+		if($admin->role == 'kordes'){
 			$desa = Desa::find($request->desa_id);
-			$desa->user_id = $admin->id;
+			$desa->pengurus_id = $admin->id;
 			$desa->save();
 		}
 		
