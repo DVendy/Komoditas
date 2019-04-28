@@ -94,14 +94,14 @@ class AdminController extends Controller
 		}else{
 			$validator = Validator::make($request->all(), [
 				'name' => 'required',
-				'role' => 'required|in:desa,admin,superadmin',
-				'email' => 'required|unique:users',
+				'role' => 'required|in:kordes,admin,superadmin',
+				'email' => 'required',Rule::unique('users')->ignore($id),
 				// 'password' => 'required|confirmed',
 			]);
 		}
 
         if ($validator->fails())
-            return redirect()->action('AdminController@create')->withErrors($validator)->withInput();
+            return redirect()->action('AdminController@edit', $id)->withErrors($validator)->withInput();
 
         $admin = User::find($id);
         $admin->name = $request->input('name');

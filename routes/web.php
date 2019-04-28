@@ -10,13 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Imports\FirstImport;
+use Maatwebsite\Excel\Facades\Excel;
 
-Route::get('/tes', function(){
+Route::get('/import', function(){
 	//die();
-	dd(date('Y-m-d'));
+	Excel::import(new FirstImport, public_path('data/data_kordes.xls'));
+	
+	return 'done';
 });
 
-Route::get('/god/admin', function(){
+Route::get('/genesis', function(){
 	//die();
 	$user = App\User::where('email', 'superadmin@komoditas.id')->first();
 	if(!$user)
@@ -28,6 +32,71 @@ Route::get('/god/admin', function(){
 	$user->password = Hash::make('123qwe');
 	$user->role = 'superadmin';
 	$user->save();
+	
+		$data = array(
+			array(
+				'name'=>'SAPI POTONG', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'KAMBING POTONG', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'SAPI PERAH', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'AYAM PEDAGING', 'type'=>'ternak',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'JAGUNG HIBRIDA', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'JAGUNG MANIS', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'CABE RAWIT', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'PADI', 'type'=>'tanaman',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'IKAN LELE', 'type'=>'ikan',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'IKAN NILA', 'type'=>'ikan',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'BELUT', 'type'=>'ikan',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+			array(
+				'name'=>'IKAN ……', 'type'=>'ikan',
+				'created_at'=>date('Y-m-d H:i:s'),
+				'updated_at'=> date('Y-m-d H:i:s')
+			   ),
+		);
+
+		App\Komoditas::insert($data);
 });
 
 Route::group(['middleware' => 'guest'], function () {
@@ -114,6 +183,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::group(['prefix' => 'god-mode'], function () {
 		Route::get('/', 'DashboardController@godMode');
 		Route::get('/clear-data', 'DashboardController@clearData');
+		Route::get('/clear-data-1', 'DashboardController@clearData1');
 	});
 	
 	Route::get('/logout', 'Auth\LoginController@logout');

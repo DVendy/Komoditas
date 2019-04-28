@@ -137,4 +137,18 @@ class DashboardController extends Controller
 		
 		return redirect('/');
 	}
+	
+    public function clearData1(){
+		Eloquent::unguard();
+
+        //disable foreign key check for this connection before running seeders
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		
+		HistoryKomoditasLahan::truncate();
+		KomoditasLahan::truncate();
+		Lahan::truncate();
+		
+		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+		return redirect('/');
+	}
 }
