@@ -29,7 +29,7 @@
 	<section class="content">
 		<div class="row">
 			<div class="col-xs-12">
-				<a href="#" class="btn btn-app bg-orange ml-0">
+				<a href="#box-detail" class="btn btn-app bg-orange ml-0">
 					<i class="fa fa-edit"></i> Rekap Harian
 				</a>
 				<a href="{{ action('LahanController@addKomoditas', $lahan->id) }}" class="btn btn-app bg-aqua ml-10">
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 			
-			<div class="col-md-8">
+			<div class="col-md-8" id="box-detail">
 				<div class="box box-primary box-flat">
 					<div class="box-header with-border">
 						<div class="row">
@@ -187,6 +187,16 @@
 			hideAllKomoditas();
 			$('#'+komo_id).show();
 		}
+		
+		document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+			anchor.addEventListener('click', function (e) {
+				e.preventDefault();
+
+				document.querySelector(this.getAttribute('href')).scrollIntoView({
+					behavior: 'smooth'
+				});
+			});
+		});
 		
 		$('#sel-komoditas').on('change', function() { //When we change the project, call the function
 			showKomoditas();

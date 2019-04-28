@@ -46,7 +46,7 @@
 	<section class="content">
 		<div class="row">
 			<div class="col-md-12">
-				<div id="map"></div>
+				<div id="map" class="hidden-xs"></div>
 				<div class="box box-primary box-flat">
 					<div class="box-header with-border">
 						<h3 class="box-title">Lahan</h3>
@@ -75,7 +75,7 @@
 									<td>{{ (float)$val->luas }} m<sup>2</sup></td>
 									<td>
 										<a href="{{ action('LahanController@detail', [$val->id]) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Detail</a>
-										<a href="{{ action('LahanController@delete', [$val->id]) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus lahan ini?', '{{ action('LahanController@delete', [$val->id]) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach

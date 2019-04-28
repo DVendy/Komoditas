@@ -24,7 +24,7 @@
 @section('content')
 	<section class="content-header">
 		<h1>
-			Membuat Lahan
+			Mendaftarkan Lahan
 			<small>
 				<a href="{{ action('LahanController@index') }}" class="btn btn-block btn-success btn-flat"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Semua Lahan</a>
 			</small>
@@ -109,8 +109,8 @@
 								<textarea name="pemilik" class="form-control" rows="5" placeholder="Informasi pemilik lahan : Nama, alamat, nomor HP, dsb"></textarea>
 							</div>
 							
-							@if(false)
-							<div class="form-group">
+							@if(true)
+							<div class="form-group hidden-xs">
 								<label for="exampleInputEmail1">Lokasi Lahan</label>
 								<div class="alert alert-info">
 									<h4><i class="icon fa fa-info"></i> Info</h4>

@@ -49,14 +49,21 @@
 	<body class="hold-transition login-page">
 		<div class="login-box">
 			<div class="login-logo">
-				<a href="#"><b>Komoditas</b>.id</a>
+				<a href="#"><b>Sitani Ternak Ikan</b></a>
 			</div>
 			<!-- /.login-logo -->
 			<div class="login-box-body">
-				@if (session('fail'))
+				@if (session('fail') == '1')
 					<div class="callout callout-danger">
 						<h4>Data akun salah</h4>
 						<p>Data akun yang anda masukkan salah, silahkan periksa kembali.
+						</p>
+					</div>
+				@endif
+				@if (session('fail') == '2')
+					<div class="callout callout-danger">
+						<h4>Tidak ada desa di bawah anda</h4>
+						<p>Akun anda tidak memiliki desa yang dimanage.
 						</p>
 					</div>
 				@endif

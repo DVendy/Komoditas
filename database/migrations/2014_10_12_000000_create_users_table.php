@@ -180,12 +180,12 @@ class CreateUsersTable extends Migration
 
             $table->foreign('komoditas_id')
             ->references('id')->on('komoditas')
-            ->onDelete('set null')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
 
             $table->foreign('lahan_id')
             ->references('id')->on('lahan')
-            ->onDelete('set null')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
         });
 
@@ -233,17 +233,17 @@ class CreateUsersTable extends Migration
 
             $table->foreign('komoditas_lahan_id')
             ->references('id')->on('komoditas_lahan')
-            ->onDelete('set null')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
 
             $table->foreign('komoditas_id')
             ->references('id')->on('komoditas')
-            ->onDelete('set null')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
 
             $table->foreign('lahan_id')
             ->references('id')->on('lahan')
-            ->onDelete('set null')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
         });
 

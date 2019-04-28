@@ -54,7 +54,7 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Nama</label>
-								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Provinsi">
+								<input name="nama" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nama Kabupaten">
 							</div>
 						</div>
 						<!-- /.box-body -->

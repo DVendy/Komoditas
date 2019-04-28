@@ -97,10 +97,10 @@
 								<tr>
 									<td>{{ $val->name }}</td>
 									<td>{{ $val->phone }}</td>
-									<td>{{ $val->p_desa }}</td>
+									<td>{{ $val->p_desa ? $val->p_desa->name : '-' }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -132,7 +132,7 @@
 									<td>{{ $val->p_kecamatan->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -164,7 +164,7 @@
 									<td>{{ $val->p_kabupaten->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -196,7 +196,7 @@
 									<td>{{ $val->p_provinsi->name }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -228,7 +228,7 @@
 									<td>{{ $val->email }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach
@@ -260,7 +260,7 @@
 									<td>{{ $val->email }}</td>
 									<td>
 										<a href="{{ action('AdminController@edit', $val->id) }}" class="btn btn-sm btn-success btn-flat"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Ubah</a>
-										<a href="{{ action('AdminController@delete', $val->id) }}" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
+										<a onclick="confirmation('Hapus admin?', '{{ action('AdminController@delete', $val->id) }}')" href="#" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-trash"></i>&nbsp;&nbsp;Hapus</a>
 									</td>
 								</tr>
 								@endforeach

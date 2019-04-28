@@ -80,13 +80,66 @@ class AdminController extends Controller
 		
         return redirect()->action('AdminController@index')->withMessages('Data admin telah berhasil disimpan');
     }
+    public function doEdit(Request $request, $id)
+    {
+		// dd(str_replace([' ', '-', '+'], '', $request->input('phone')));
+		if($request->role == 'kordes'){
+			$validator = Validator::make($request->all(), [
+				'name' => 'required',
+				'role' => 'required|in:kordes,admin,superadmin',
+				'phone' => 'required',Rule::unique('users')->ignore($id),
+				'desa_id' => 'required',
+				// 'password' => 'required|confirmed',
+			]);
+		}else{
+			$validator = Validator::make($request->all(), [
+				'name' => 'required',
+				'role' => 'required|in:desa,admin,superadmin',
+				'email' => 'required|unique:users',
+				// 'password' => 'required|confirmed',
+			]);
+		}
+
+        if ($validator->fails())
+            return redirect()->action('AdminController@create')->withErrors($validator)->withInput();
+
+        $admin = User::find($id);
+        $admin->name = $request->input('name');
+        $admin->phone = str_replace([' ', '-', '+'], '', $request->input('phone'));
+        $admin->role = $request->input('role');
+		if($request->input('password'))
+			$admin->password = Hash::make($request->input('password'));
+		
+		if($admin->role == 'kordes')
+			$admin->email = $admin->phone;
+		else
+			$admin->email = $request->input('email');
+		
+        $admin->save();
+
+		//ROLE
+		if($admin->role == 'kordes'){
+			$desa = Desa::where('pengurus_id', $admin->id)->first();
+			if($desa){
+				$desa->pengurus_id = null;
+				$desa->save();
+			}
+			$desa = Desa::find($request->desa_id);
+			$desa->pengurus_id = $admin->id;
+			$desa->save();
+		}
+		
+        return redirect()->action('AdminController@index')
+			->withMessage(['title' => 'Sukses!', 'color' => 'success', 'body' => 'Data admin telah berhasil disimpan!']);
+    }
 	
     public function edit($id)
     {
 		$admin = User::find($id);
 		// dd($admin);
 		
-        return view('admin.create');
+        return view('admin.edit')
+			->withAdmin($admin);
     }
 	
     public function delete($id)

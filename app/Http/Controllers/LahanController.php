@@ -95,12 +95,12 @@ class LahanController extends Controller
 		], $messages);
 
         if ($validator->fails())
-            return redirect()->action('LahanController@create')->withErrors($validator)->withInput();
+            return redirect()->action('LahanController@edit', $id)->withErrors($validator)->withInput();
 		
 		$data = Lahan::find($id);
 
         if (!$data)
-            return redirect()->action('LahanController@create');
+            return redirect()->action('LahanController@edit', $id);
 		
 		// $data->pengurus_id = $auth->id;
 		// $data->desa_id = $auth->p_desa->id;

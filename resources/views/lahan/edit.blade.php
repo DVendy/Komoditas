@@ -110,7 +110,7 @@
 							</div>
 							
 							@if(true)
-							<div class="form-group">
+							<div class="form-group hidden-xs">
 								<label for="exampleInputEmail1">Lokasi Lahan</label>
 								<div class="alert alert-info">
 									<h4><i class="icon fa fa-info"></i> Info</h4>

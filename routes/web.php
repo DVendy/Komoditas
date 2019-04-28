@@ -111,5 +111,10 @@ Route::group(['middleware' => 'auth'], function () {
 		});
 	});
 	
+	Route::group(['prefix' => 'god-mode'], function () {
+		Route::get('/', 'DashboardController@godMode');
+		Route::get('/clear-data', 'DashboardController@clearData');
+	});
+	
 	Route::get('/logout', 'Auth\LoginController@logout');
 });

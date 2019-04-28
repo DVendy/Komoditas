@@ -182,7 +182,7 @@ class DatabaseSeeder extends Seeder
 					$kec->kabupaten_id = $kab->id;
 					$kec->pengurus_id = $user->id;
 					$kec->save();
-					for($i_des = 0; $i_des < 5; $i_des++){
+					for($i_des = 0; $i_des < 10; $i_des++){
 						$user = new App\User;
 						$user->name = $faker->firstName.' '.$faker->lastName;
 						$user->email = strtolower(str_replace(' ', '', $user->name)).'@komoditas.id';
@@ -218,7 +218,7 @@ class DatabaseSeeder extends Seeder
 								$lk->b_tahap_panen = mt_rand(100*100, 800*100) / 100;
 								$lk->b_tanggal_masuk_ternak = $faker->dateTimeBetween($startDate = '-3 months', $endDate = 'now', $timezone = null);
 								$lk->b_jumlah_ternak = mt_rand(10, 200);
-								$lk->b_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+2 months', $timezone = null);
+								$lk->b_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+1 months', $timezone = null);
 								$lk->b_estimasi_hasil_panen = mt_rand(10, 200);
 							}
 							if($komoditas['type'] == 'tanaman'){
@@ -228,7 +228,7 @@ class DatabaseSeeder extends Seeder
 								$lk->t_tahap_panen = mt_rand(100*100, 800*100) / 100;
 								$lk->t_tanggal_mulai_tanam = $faker->dateTimeBetween($startDate = '-3 months', $endDate = 'now', $timezone = null);
 								$lk->t_jumlah_tanaman = mt_rand(10, 200);
-								$lk->t_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+2 months', $timezone = null);
+								$lk->t_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+1 months', $timezone = null);
 								$lk->t_estimasi_hasil_panen = mt_rand(10, 200);
 							}
 							if($komoditas['type'] == 'ikan'){
@@ -238,7 +238,7 @@ class DatabaseSeeder extends Seeder
 								$lk->i_tahap_panen = mt_rand(100*100, 800*100) / 100;
 								$lk->i_tanggal_tebar_ikan = $faker->dateTimeBetween($startDate = '-3 months', $endDate = 'now', $timezone = null);
 								$lk->i_jumlah_ikan = mt_rand(10, 200);
-								$lk->i_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+2 months', $timezone = null);
+								$lk->i_tanggal_panen = $faker->dateTimeBetween($startDate = 'now', $endDate = '+1 months', $timezone = null);
 								$lk->i_estimasi_hasil_panen = mt_rand(10, 200);
 							}
 							$lk->save();

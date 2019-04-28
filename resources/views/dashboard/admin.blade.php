@@ -11,10 +11,37 @@
 	
 	$komoditas = [];
 	foreach(App\Komoditas::orderBy('type', 'desc')->get() as $val){
-		$komoditas[$val->type][] = $val;
+		$komoditas[$val->type]['data'][] = $val;
 	}
+	$komoditas['ternak']['satuan'] = 'Ekor';
+	$komoditas['tanaman']['satuan'] = 'Kg';
+	$komoditas['ikan']['satuan'] = 'Kg';
 	
-	$hasil_overview = [];
+	$hasil_overview = [
+		'ternak' => [
+			'tanggal' => null,
+			'komoditas_id' => null,
+			'data_raw' => null,
+			'data' => null,
+		],
+		'tanaman' => [
+			'tanggal' => null,
+			'komoditas_id' => null,
+			'data_raw' => null,
+			'data' => null,
+		],
+		'ikan' => [
+			'tanggal' => null,
+			'komoditas_id' => null,
+			'data_raw' => null,
+			'data' => null,
+		],
+	];
+	$hasil_jumlah = [
+		'ternak' => null,
+		'tanaman' => null,
+		'ikan' => null,
+	];
 	$hasil_bulan = [];
 	$hasil_bulan['hasil'] = [];
 	$hasil_bulan['jumlah'] = [];
@@ -31,15 +58,17 @@
 		$hasil_overview['ternak']['komoditas_id'][$val->komoditas_id] = $val->name;
 		$hasil_overview['ternak']['data_raw'][$val->name][$val->tanggal_panen] = $val;
 	}
-	foreach($hasil_overview['ternak']['tanggal'] as $val){
-		foreach($hasil_overview['ternak']['komoditas_id'] as $val1){
-			if(isset($hasil_overview['ternak']['data_raw'][$val1][$val]))
-				$hasil_overview['ternak']['data'][$val][$val1] = $hasil_overview['ternak']['data_raw'][$val1][$val]->hasil_panen*1;
-			else
-				$hasil_overview['ternak']['data'][$val][$val1] = 0;
+	if($hasil_overview['ternak']['tanggal']){
+		foreach($hasil_overview['ternak']['tanggal'] as $val){
+			foreach($hasil_overview['ternak']['komoditas_id'] as $val1){
+				if(isset($hasil_overview['ternak']['data_raw'][$val1][$val]))
+					$hasil_overview['ternak']['data'][$val][$val1] = $hasil_overview['ternak']['data_raw'][$val1][$val]->hasil_panen*1;
+				else
+					$hasil_overview['ternak']['data'][$val][$val1] = 0;
+			}
 		}
+		ksort($hasil_overview['ternak']['data']);
 	}
-	ksort($hasil_overview['ternak']['data']);
 	
 	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(t_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(t_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
 	foreach($query as $val){
@@ -53,15 +82,17 @@
 		$hasil_overview['tanaman']['komoditas_id'][$val->komoditas_id] = $val->name;
 		$hasil_overview['tanaman']['data_raw'][$val->name][$val->tanggal_panen] = $val;
 	}
-	foreach($hasil_overview['tanaman']['tanggal'] as $val){
-		foreach($hasil_overview['tanaman']['komoditas_id'] as $val1){
-			if(isset($hasil_overview['tanaman']['data_raw'][$val1][$val]))
-				$hasil_overview['tanaman']['data'][$val][$val1] = $hasil_overview['tanaman']['data_raw'][$val1][$val]->hasil_panen*1;
-			else
-				$hasil_overview['tanaman']['data'][$val][$val1] = 0;
+	if($hasil_overview['tanaman']['tanggal']){
+		foreach($hasil_overview['tanaman']['tanggal'] as $val){
+			foreach($hasil_overview['tanaman']['komoditas_id'] as $val1){
+				if(isset($hasil_overview['tanaman']['data_raw'][$val1][$val]))
+					$hasil_overview['tanaman']['data'][$val][$val1] = $hasil_overview['tanaman']['data_raw'][$val1][$val]->hasil_panen*1;
+				else
+					$hasil_overview['tanaman']['data'][$val][$val1] = 0;
+			}
 		}
+		ksort($hasil_overview['tanaman']['data']);
 	}
-	ksort($hasil_overview['tanaman']['data']);
 	
 	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(i_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(i_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
 	foreach($query as $val){
@@ -75,17 +106,33 @@
 		$hasil_overview['ikan']['komoditas_id'][$val->komoditas_id] = $val->name;
 		$hasil_overview['ikan']['data_raw'][$val->name][$val->tanggal_panen] = $val;
 	}
-	foreach($hasil_overview['ikan']['tanggal'] as $val){
-		foreach($hasil_overview['ikan']['komoditas_id'] as $val1){
-			if(isset($hasil_overview['ikan']['data_raw'][$val1][$val]))
-				$hasil_overview['ikan']['data'][$val][$val1] = $hasil_overview['ikan']['data_raw'][$val1][$val]->hasil_panen*1;
-			else
-				$hasil_overview['ikan']['data'][$val][$val1] = 0;
+	if($hasil_overview['ikan']['tanggal']){
+		foreach($hasil_overview['ikan']['tanggal'] as $val){
+			foreach($hasil_overview['ikan']['komoditas_id'] as $val1){
+				if(isset($hasil_overview['ikan']['data_raw'][$val1][$val]))
+					$hasil_overview['ikan']['data'][$val][$val1] = $hasil_overview['ikan']['data_raw'][$val1][$val]->hasil_panen*1;
+				else
+					$hasil_overview['ikan']['data'][$val][$val1] = 0;
+			}
 		}
+		ksort($hasil_overview['ikan']['data']);
 	}
-	ksort($hasil_overview['ikan']['data']);
 	
-	// dd($hasil_bulan);
+	// Jumlah ===============================================================================
+	$query = \DB::select("SELECT komoditas.name, SUM(b_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (b_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	foreach($query as $val){
+		$hasil_jumlah['ternak'][$val->name] = $val->hasil_panen;
+	}
+	$query = \DB::select("SELECT komoditas.name, SUM(t_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	foreach($query as $val){
+		$hasil_jumlah['tanaman'][$val->name] = $val->hasil_panen;
+	}
+	$query = \DB::select("SELECT komoditas.name, SUM(i_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	foreach($query as $val){
+		$hasil_jumlah['ikan'][$val->name] = $val->hasil_panen;
+	}
+	// ======================================================================================
+	// dd($hasil_jumlah);
 	// dd($hasil_overview);
 	// dd($komoditas);
 ?>
@@ -101,6 +148,7 @@
 	<style>
 		.info-box {
 			min-height: 70px;
+			margin-bottom: 21px;
 		}
 		.info-box-content {
 			padding: 12px 10px;
@@ -217,7 +265,7 @@
 					<div class="nav-tabs-custom">
 						<!-- Tabs within a box -->
 						<ul class="nav nav-tabs pull-right">
-							@foreach($val as $i => $t)
+							@foreach($val['data'] as $i => $t)
 								<li @if($i == 0) class="active" @endif>
 									<a href="#chart-{{ $t->id }}" data-toggle="tab">{{ $t->name }}</a>
 								</li>
@@ -228,7 +276,7 @@
 						</ul>
 						<div class="tab-content no-padding">
 							<!-- Morris chart - Sales -->
-							@foreach($val as $i => $t)
+							@foreach($val['data'] as $i => $t)
 								<div class="chart tab-pane @if($i == 0) active @endif" id="chart-{{ $t->id }}" style="position: relative; height: 300px;"></div>
 							@endforeach
 						</div>
@@ -236,20 +284,22 @@
 					<!-- /.nav-tabs-custom -->
 				</section>
 				<div class="col-lg-4">
-				@foreach($val as $i => $t)
-					@php
-						// shuffle($colors);
-					@endphp
-						<div class="info-box">
-							<span class="info-box-icon bg-yellow" style=" background-color: {{ $colors[$i] }} !important; ">
-								<i class="ion ion-ios-pricetag-outline"></i>
-							</span>
-							<div class="info-box-content">
-								<span class="info-box-text">{{ $t->name }}</span>
-								<span class="info-box-number">5,200</span>
+				@foreach($val['data'] as $i => $t)
+					@if($hasil_jumlah[$key] && array_key_exists($t->name, $hasil_jumlah[$key]))
+						@php
+							// shuffle($colors);
+						@endphp
+							<div class="info-box">
+								<span class="info-box-icon bg-yellow" style=" background-color: {{ $colors[$i] }} !important; ">
+									<i class="ion ion-ios-pricetag-outline"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">{{ $t->name }}</span>
+									<span class="info-box-number">{{ $hasil_jumlah[$key][$t->name] }} <small>{{ $komoditas[$key]['satuan'] }}</small></span>
+								</div>
+								<!-- /.info-box-content -->
 							</div>
-							<!-- /.info-box-content -->
-						</div>
+					@endif
 				@endforeach
 				</div>
 			</div>
@@ -275,31 +325,39 @@
 					element   : 'chart-{{ $j }}',
 					resize    : true,
 					data      : [
-							@foreach($hasil_overview[$j]['data'] as $tanggal => $hasil)
-							  { tanggal: '{{ $tanggal }}', 
-								@foreach($hasil as $key_hasil => $value_hasil)
-								'{{ $key_hasil }}': {{ $value_hasil }},
+							@if($hasil_overview[$j]['data'])
+								@foreach($hasil_overview[$j]['data'] as $tanggal => $hasil)
+								  { tanggal: '{{ $tanggal }}', 
+									@foreach($hasil as $key_hasil => $value_hasil)
+									'{{ $key_hasil }}': {{ $value_hasil }},
+									@endforeach
+								  },
 								@endforeach
-							  },
-							@endforeach
+							@endif
 							],
 					xkey      : 'tanggal',
 					ykeys     : [
-							@foreach($hasil_overview[$j]['komoditas_id'] as $val)
-							'{{ $val }}',
-							@endforeach
+							@if($hasil_overview[$j]['komoditas_id'])
+								@foreach($hasil_overview[$j]['komoditas_id'] as $val)
+								'{{ $val }}',
+								@endforeach
+							@endif
 						],
 					labels    : [
-							@foreach($hasil_overview[$j]['komoditas_id'] as $val)
-							'{{ $val }}',
-							@endforeach
+							@if($hasil_overview[$j]['komoditas_id'])
+								@foreach($hasil_overview[$j]['komoditas_id'] as $val)
+								'{{ $val }}',
+								@endforeach
+							@endif
 						],
 					barColors: [
-							@php $i=0 @endphp
-							@foreach($hasil_overview[$j]['komoditas_id'] as $val)
-							'{{ $colors[$i] }}',
-							@php $i++ @endphp
-							@endforeach
+							@if($hasil_overview[$j]['komoditas_id'])
+								@php $i=0 @endphp
+								@foreach($hasil_overview[$j]['komoditas_id'] as $val)
+								'{{ $colors[$i] }}',
+								@php $i++ @endphp
+								@endforeach
+							@endif
 						],
 					hideHover : 'auto'
 				});
@@ -310,7 +368,7 @@
 				@php
 					shuffle($colors);
 				@endphp
-				@foreach($val as $i => $t)
+				@foreach($val['data'] as $i => $t)
 					@if(isset($hasil_bulan['hasil'][$t->id]))
 					var chart_{{ $t->id }} = new Morris.Bar({
 						element   : 'chart-{{ $t->id }}',
@@ -334,7 +392,7 @@
 
 			  switch (target) {
 				@foreach($komoditas as $key => $val)
-					@foreach($val as $i => $t)
+					@foreach($val['data'] as $i => $t)
 					case "#chart-{{ $t->id }}":
 					  chart_{{ $t->id }}.redraw();
 					  $(window).trigger('resize');

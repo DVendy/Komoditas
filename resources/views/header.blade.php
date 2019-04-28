@@ -8,12 +8,7 @@
 	@if($auth->role == 'kordes')
 		<li class="header">MAIN MENU</li>
 		<li @if($uri == '/') class="active" @endif><a href="{{ action('DashboardController@index') }}"><i class="fa fa-map"></i> <span>Dashboard</span></a></li>
-		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span>Lahan</span></a></li>
-		
-		<li class="header">KOMODITAS</li>
-		<li @if(strpos($uri, 'lahan/komoditas/ternak') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'ternak') }}"><i class="fa fa-map"></i> <span>Komoditas Ternak</span></a></li>
-		<li @if(strpos($uri, 'lahan/komoditas/tanaman') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'tanaman') }}"><i class="fa fa-map"></i> <span>Komoditas Tanaman</span></a></li>
-		<li @if(strpos($uri, 'lahan/komoditas/ikan') !== false) class="active" @endif><a href="{{ action('LahanKomoditasController@index', 'ikan') }}"><i class="fa fa-map"></i> <span>Komoditas Ikan</span></a></li>
+		<li @if($uri == 'lahan') class="active" @endif><a href="{{ action('LahanController@index') }}"><i class="fa fa-map"></i> <span> Daftar Lahan</span></a></li>
 	@endif
 	
 	@if(in_array($auth->role, ['admin', 'superadmin']))
@@ -33,6 +28,7 @@
 	
 		@if(in_array($auth->role, ['superadmin']))
 			<li @if(preg_match('#^komoditas#', $uri) === 1) class="active" @endif><a href="{{ action('KomoditasController@index') }}"><i class="fa fa-map"></i> <span>Komoditas</span></a></li>
+			<li @if(preg_match('#^god-mode#', $uri) === 1) class="active" @endif><a href="{{ action('DashboardController@godMode') }}"><i class="fa fa-map"></i> <span>God Mode</span></a></li>
 		@endif
 	@endif
 	<hr>

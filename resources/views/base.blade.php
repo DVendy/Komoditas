@@ -2,7 +2,7 @@
 	$auth = Auth::user();
 	$theme = 'green';
 	
-	if($auth->role == 'desa')
+	if($auth->role == 'kordes')
 		$theme = 'blue';
 @endphp
 
@@ -76,7 +76,7 @@
 					<!-- mini logo for sidebar mini 50x50 pixels -->
 					<span class="logo-mini"><b>K</b>id</span>
 					<!-- logo for regular state and mobile devices -->
-					<span class="logo-lg"><b>KOMODITAS</b>.id</span>
+					<span class="logo-lg">Sitani Ternak Ikan</span>
 				</a>
 				<!-- Header Navbar -->
 				<nav class="navbar navbar-static-top" role="navigation">
@@ -144,7 +144,14 @@
 		<!-- Optionally, you can add Slimscroll and FastClick plugins.
 			Both of these plugins are recommended to enhance the
 			user experience. -->
-			
+		<script>
+			function confirmation(msg, url) {
+				var r = confirm(msg);
+				if (r == true) {
+					window.location.href = url;
+				}
+			}
+		</script>
 		@yield('script')
 	</body>
 </html>
