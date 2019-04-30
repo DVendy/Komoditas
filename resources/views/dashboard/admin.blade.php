@@ -1,12 +1,40 @@
 <?php
 	$jenis = ['ternak', 'tanaman', 'ikan'];
 	
+	$q_date = [];
+	$q_date['year'] = Request::input('year');
+	$q_date['month'] = Request::input('month');
+	if(!$q_date['year'])
+		$q_date['year'] = date('Y');
+	if(!$q_date['month'])
+		$q_date['month'] = date('m');
+	$q_date['date_from'] = date_create_from_format('Ymd', $q_date['year'].$q_date['month'].'01')->format('Y-m-d 00:00:00.000000');
+	$q_date['date_to'] = date_create_from_format('Ymd', $q_date['year'].$q_date['month'].'01')->format('Y-m-t 23:59:59.999999');
+	// dd($q_date);
+	
+	$years = ['2019'];
+	$months = array(
+		['January', '01'],
+		['February', '02'],
+		['March', '03'],
+		['April', '04'],
+		['May', '05'],
+		['June', '06'],
+		['July', '07'],
+		['August', '08'],
+		['September', '09'],
+		['October', '10'],
+		['November', '11'],
+		['December', '12']
+	);
+	
 	$overview = [];
 	$overview['lahan'] = App\Lahan::count();
 	$overview['desa'] = App\Desa::count();
 	$overview['kordes'] = App\User::where('role', 'kordes')->count();
 	
 	$colors = ['#1abc9c', '#3498db', '#9b59b6', '#34495e', '#f1c40f', '#e74c3c', '#95a5a6'];
+	$colors_k = ['ternak' => '#e74c3c', 'tanaman' => '#f1c40f', 'ikan' => '#1abc9c'];
 	shuffle($colors);
 	
 	$komoditas = [];
@@ -46,7 +74,7 @@
 	$hasil_bulan['hasil'] = [];
 	$hasil_bulan['jumlah'] = [];
 	
-	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(b_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(b_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (b_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
+	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(b_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(b_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (b_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
 	foreach($query as $val){
 		if(!isset($hasil_bulan['jumlah'][$val->komoditas_id]))
 			$hasil_bulan['jumlah'][$val->komoditas_id] = 0;
@@ -70,7 +98,7 @@
 		ksort($hasil_overview['ternak']['data']);
 	}
 	
-	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(t_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(t_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
+	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(t_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(t_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
 	foreach($query as $val){
 		if(!isset($hasil_bulan['jumlah'][$val->komoditas_id]))
 			$hasil_bulan['jumlah'][$val->komoditas_id] = 0;
@@ -94,7 +122,7 @@
 		ksort($hasil_overview['tanaman']['data']);
 	}
 	
-	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(i_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(i_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
+	$query = \DB::select("SELECT komoditas.name, komoditas_id, SUM(i_estimasi_hasil_panen) as 'hasil_panen', DATE_FORMAT(i_tanggal_panen, '%d %M') as 'tanggal_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY tanggal_panen, komoditas_id ORDER BY `tanggal_panen` ASC");
 	foreach($query as $val){
 		if(!isset($hasil_bulan['jumlah'][$val->komoditas_id]))
 			$hasil_bulan['jumlah'][$val->komoditas_id] = 0;
@@ -119,15 +147,15 @@
 	}
 	
 	// Jumlah ===============================================================================
-	$query = \DB::select("SELECT komoditas.name, SUM(b_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (b_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	$query = \DB::select("SELECT komoditas.name, SUM(b_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (b_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY name");
 	foreach($query as $val){
 		$hasil_jumlah['ternak'][$val->name] = $val->hasil_panen;
 	}
-	$query = \DB::select("SELECT komoditas.name, SUM(t_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	$query = \DB::select("SELECT komoditas.name, SUM(t_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (t_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY name");
 	foreach($query as $val){
 		$hasil_jumlah['tanaman'][$val->name] = $val->hasil_panen;
 	}
-	$query = \DB::select("SELECT komoditas.name, SUM(i_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '2019-04-01 00:00:00.000000' AND '2019-04-30 23:59:59.999999') GROUP BY name");
+	$query = \DB::select("SELECT komoditas.name, SUM(i_estimasi_hasil_panen) as 'hasil_panen' FROM komoditas_lahan LEFT JOIN komoditas ON komoditas_lahan.komoditas_id = komoditas.id WHERE (i_tanggal_panen BETWEEN '".$q_date['date_from']."' AND '".$q_date['date_to']."') GROUP BY name");
 	foreach($query as $val){
 		$hasil_jumlah['ikan'][$val->name] = $val->hasil_panen;
 	}
@@ -228,6 +256,50 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-sm-12 col-md-6">
+				<div class="box box-warning box-solid">
+					<div class="box-header with-border">
+						<h3 class="box-title"> <i class="fa fa-filter"></i>&nbsp;&nbsp;Filter</h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+							</button>
+						</div>
+						<!-- /.box-tools -->
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<form method="GET" action="{{ action('DashboardController@index') }}">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<select class="form-control" name="year">
+											<option disabled>--Pilih Tahun--</option>
+											<option selected>{{ $q_date['year'] }}</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-5">
+									<div class="form-group">
+										<select class="form-control" name="month">
+											<option disabled>--Pilih Bulan--</option>
+											@foreach($months as $m)
+											<option value="{{ $m[1] }}" @if($q_date['month'] == $m[1]) selected @endif>{{ $m[0] }}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<button type="submit" class="btn btn-block btn-primary"><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- /.box-body -->
+				</div>
+			</div>
+		</div>
+		<div class="row">
 			<!-- Left col -->
 			<section class="col-lg-12 connectedSortable">
 				<!-- Custom tabs (Charts with tabs)-->
@@ -290,7 +362,7 @@
 							// shuffle($colors);
 						@endphp
 							<div class="info-box">
-								<span class="info-box-icon bg-yellow" style=" background-color: {{ $colors[$i] }} !important; ">
+								<span class="info-box-icon bg-yellow" style=" background-color: {{ $colors_k[$key] }} !important; ">
 									<i class="ion ion-ios-pricetag-outline"></i>
 								</span>
 								<div class="info-box-content">
@@ -381,7 +453,7 @@
 						xkey      : 'tanggal',
 						ykeys     : ['item1'],
 						labels    : ['Jumlah Panen'],
-						barColors: ['{{ $colors[$i] }}'],
+						barColors: ['{{ $colors_k[$key] }}'],
 						hideHover : 'auto'
 					});
 					@endif
