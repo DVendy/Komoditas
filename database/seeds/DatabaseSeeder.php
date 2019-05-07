@@ -197,7 +197,7 @@ class DatabaseSeeder extends Seeder
 						$des->pengurus_id = $user->id;	
 						$des->save();
 						
-						for($i_lahan = 0; $i_lahan < 30; $i_lahan++){
+						for($i_lahan = 0; $i_lahan < 20; $i_lahan++){
 							$lahan = new App\Lahan;
 							$lahan->desa_id = $des->id;
 							$lahan->name = 'Lahan '.$faker->secondaryAddress;

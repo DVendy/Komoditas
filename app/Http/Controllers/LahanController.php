@@ -155,6 +155,24 @@ class LahanController extends Controller
 		$data->lahan_id = $id;
 		
 		if($komoditas->type == 'ternak'){
+			
+			$messages = [
+				'required' => 'Kolom :attribute perlu diisi.',
+			];
+			$validator = Validator::make($request->all(), [
+				'b_luas_kandang' => 'required',
+				'b_tahap_persiapan' => 'required',
+				'b_tahap_pemeliharaan' => 'required',
+				'b_tahap_panen' => 'required',
+				'b_tanggal_masuk_ternak' => 'required',
+				'b_jumlah_ternak' => 'required',
+				'b_tanggal_panen' => 'required',
+				'b_estimasi_hasil_panen' => 'required',
+			], $messages);
+
+			if ($validator->fails())
+				return redirect()->action('LahanController@addKomoditas', $id)->withErrors($validator)->withInput();
+			
 			$data->type = 'ternak';
 			$data->b_luas_kandang = $request->b_luas_kandang;
 			$data->b_tahap_persiapan = $request->b_tahap_persiapan;
@@ -173,6 +191,24 @@ class LahanController extends Controller
 		}
 		
 		if($komoditas->type == 'tanaman'){
+			
+			$messages = [
+				'required' => 'Kolom :attribute perlu diisi.',
+			];
+			$validator = Validator::make($request->all(), [
+				't_luas_lahan' => 'required',
+				't_tahap_persiapan' => 'required',
+				't_tahap_pemeliharaan' => 'required',
+				't_tahap_panen' => 'required',
+				't_tanggal_mulai_tanam' => 'required',
+				't_jumlah_tanaman' => 'required',
+				't_tanggal_panen' => 'required',
+				't_estimasi_hasil_panen' => 'required',
+			], $messages);
+
+			if ($validator->fails())
+				return redirect()->action('LahanController@addKomoditas', $id)->withErrors($validator)->withInput();
+			
 			$data->type = 'tanaman';
 			$data->t_luas_lahan = $request->t_luas_lahan;
 			$data->t_tahap_persiapan = $request->t_tahap_persiapan;
@@ -191,6 +227,24 @@ class LahanController extends Controller
 		}
 		
 		if($komoditas->type == 'ikan'){
+			
+			$messages = [
+				'required' => 'Kolom :attribute perlu diisi.',
+			];
+			$validator = Validator::make($request->all(), [
+				'i_luas_kolam' => 'required',
+				'i_tahap_persiapan' => 'required',
+				'i_tahap_pemeliharaan' => 'required',
+				'i_tahap_panen' => 'required',
+				'i_tanggal_tebar_ikan' => 'required',
+				'i_jumlah_ikan' => 'required',
+				'i_tanggal_panen' => 'required',
+				'i_estimasi_hasil_panen' => 'required',
+			], $messages);
+
+			if ($validator->fails())
+				return redirect()->action('LahanController@addKomoditas', $id)->withErrors($validator)->withInput();
+			
 			$data->type = 'ikan';
 			$data->i_luas_kolam = $request->i_luas_kolam;
 			$data->i_tahap_persiapan = $request->i_tahap_persiapan;
@@ -210,36 +264,36 @@ class LahanController extends Controller
 		
 		$data->save();
 		
-		$history = new HistoryKomoditasLahan;
-		$history->komoditas_lahan_id = $data->id;
-		$history->komoditas_id = $data->komoditas_id;
-		$history->lahan_id = $data->lahan_id;
-		$history->type = $data->type;
-		$history->b_luas_kandang = $data->b_luas_kandang;
-		$history->b_luas_kandang = $data->b_luas_kandang;
-		$history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
-		$history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
-		$history->b_tanggal_masuk_ternak = $data->b_tanggal_masuk_ternak;
-		$history->b_jumlah_ternak = $data->b_jumlah_ternak;
-		$history->b_tanggal_panen = $data->b_tanggal_panen;
-		$history->b_estimasi_hasil_panen = $data->b_estimasi_hasil_panen;
-		$history->t_luas_lahan = $data->t_luas_lahan;
-		$history->t_tahap_persiapan = $data->t_tahap_persiapan;
-		$history->t_tahap_pemeliharaan = $data->t_tahap_pemeliharaan;
-		$history->t_tahap_panen = $data->t_tahap_panen;
-		$history->t_tanggal_mulai_tanam = $data->t_tanggal_mulai_tanam;
-		$history->t_jumlah_tanaman = $data->t_jumlah_tanaman;
-		$history->t_estimasi_hasil_panen = $data->t_estimasi_hasil_panen;
-		$history->i_luas_kolam = $data->i_luas_kolam;
-		$history->i_tahap_persiapan = $data->i_tahap_persiapan;
-		$history->i_tahap_pemeliharaan = $data->i_tahap_pemeliharaan;
-		$history->i_tahap_panen = $data->i_tahap_panen;
-		$history->i_tanggal_tebar_ikan = $data->i_tanggal_tebar_ikan;
-		$history->i_jumlah_ikan = $data->i_jumlah_ikan;
-		$history->i_tanggal_panen = $data->i_tanggal_panen;
-		$history->i_estimasi_hasil_panen = $data->i_estimasi_hasil_panen;
-		$history->other = $data->other;
-		$history->save();
+		// $history = new HistoryKomoditasLahan;
+		// $history->komoditas_lahan_id = $data->id;
+		// $history->komoditas_id = $data->komoditas_id;
+		// $history->lahan_id = $data->lahan_id;
+		// $history->type = $data->type;
+		// $history->b_luas_kandang = $data->b_luas_kandang;
+		// $history->b_luas_kandang = $data->b_luas_kandang;
+		// $history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
+		// $history->b_tahap_pemeliharaan = $data->b_tahap_pemeliharaan;
+		// $history->b_tanggal_masuk_ternak = $data->b_tanggal_masuk_ternak;
+		// $history->b_jumlah_ternak = $data->b_jumlah_ternak;
+		// $history->b_tanggal_panen = $data->b_tanggal_panen;
+		// $history->b_estimasi_hasil_panen = $data->b_estimasi_hasil_panen;
+		// $history->t_luas_lahan = $data->t_luas_lahan;
+		// $history->t_tahap_persiapan = $data->t_tahap_persiapan;
+		// $history->t_tahap_pemeliharaan = $data->t_tahap_pemeliharaan;
+		// $history->t_tahap_panen = $data->t_tahap_panen;
+		// $history->t_tanggal_mulai_tanam = $data->t_tanggal_mulai_tanam;
+		// $history->t_jumlah_tanaman = $data->t_jumlah_tanaman;
+		// $history->t_estimasi_hasil_panen = $data->t_estimasi_hasil_panen;
+		// $history->i_luas_kolam = $data->i_luas_kolam;
+		// $history->i_tahap_persiapan = $data->i_tahap_persiapan;
+		// $history->i_tahap_pemeliharaan = $data->i_tahap_pemeliharaan;
+		// $history->i_tahap_panen = $data->i_tahap_panen;
+		// $history->i_tanggal_tebar_ikan = $data->i_tanggal_tebar_ikan;
+		// $history->i_jumlah_ikan = $data->i_jumlah_ikan;
+		// $history->i_tanggal_panen = $data->i_tanggal_panen;
+		// $history->i_estimasi_hasil_panen = $data->i_estimasi_hasil_panen;
+		// $history->other = $data->other;
+		// $history->save();
 		
 		return redirect()->action('LahanController@detail', [$id, 'kl_id='.$data->id]);
 	}
