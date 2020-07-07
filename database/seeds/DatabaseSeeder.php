@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
 		//SUPERADMIN	
 		$user = new App\User;	
 		$user->name = 'Super Admin';
-		$user->email = 'superadmin@komoditas.id';
-		$user->phone = '12345';
-		$user->password = Hash::make('123qwe');
+		$user->email = 'superadmin@pentacode.id';
+		$user->phone = 'superadmin@pentacode.id';
+		$user->password = Hash::make('pentacodex');
 		$user->role = 'superadmin';
 		$user->save();
 		
